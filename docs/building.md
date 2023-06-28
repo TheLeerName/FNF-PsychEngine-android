@@ -40,7 +40,7 @@ haxelib run flixel-tools setup
 - Enter `C:\Users\<username>\AppData\Local\Android\Sdk`
 - Enter `C:\Users\<username>\AppData\Local\Android\android-ndk-r15c`
 - Enter `C:\Program Files\Java\jdk-11.0.0.1`
-8. And now compile it with: `lime test android -D NO_PRECOMPILED_HEADERS`
+1. And now compile it with: `lime test android`
 
 ## Windows
 1. Install [**Haxe 4.2.5**](https://haxe.org/download/version/4.2.5)
