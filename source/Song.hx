@@ -2,6 +2,8 @@ package;
 
 import haxe.Json;
 
+import openfl.utils.Assets;
+
 import Section;
 
 #if sys
@@ -99,11 +101,8 @@ class Song
 		#end
 
 		if(rawJson == null) {
-			#if sys
-			rawJson = File.getContent(Paths.json(formattedFolder + '/' + formattedSong)).trim();
-			#else
-			rawJson = Assets.getText(Paths.json(formattedFolder + '/' + formattedSong)).trim();
-			#end
+			if (FileSystem.exists(formattedFolder + '/' + formattedSong)) File.getContent(Paths.json(formattedFolder + '/' + formattedSong)).trim();
+			else rawJson = Assets.getText(Paths.json(formattedFolder + '/' + formattedSong)).trim();
 		}
 
 		while (!rawJson.endsWith("}"))
