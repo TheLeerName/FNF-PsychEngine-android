@@ -236,11 +236,8 @@ class Paths
 		#end
 	}
 
-	inline static public function image(key:String, ?library:String):FlxGraphic
-	{
-		// streamlined the assets process more
-		var returnAsset:FlxGraphic = returnGraphic(key, library);
-		return returnAsset;
+	inline static public function image(key:String, ?library:String):FlxGraphic {
+		return returnGraphic(key, library);
 	}
 
 	static public function getTextFromFile(key:String, ?ignoreMods:Bool = false):String
@@ -363,7 +360,7 @@ class Paths
 			localTrackedAssets.push(path);
 			return currentTrackedAssets.get(path);
 		}
-		trace('oh no its returning null NOOOO');
+		trace('oh no $key returning null NOOOO');
 		return null;
 	}
 
