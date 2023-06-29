@@ -69,7 +69,7 @@ class EditorLua {
 		set('middlescroll', ClientPrefs.middleScroll);
 
 		//stuff 4 noobz like you B)
-		Lua_helper.add_callback(lua, "getProperty", function(variable:String) {
+		set("getProperty", function(variable:String) {
 			var killMe:Array<String> = variable.split('.');
 			if(killMe.length > 1) {
 				var coverMeInPiss:Dynamic = Reflect.getProperty(EditorPlayState.instance, killMe[0]);
@@ -81,7 +81,7 @@ class EditorLua {
 			}
 			return Reflect.getProperty(EditorPlayState.instance, variable);
 		});
-		Lua_helper.add_callback(lua, "setProperty", function(variable:String, value:Dynamic) {
+		set("setProperty", function(variable:String, value:Dynamic) {
 			var killMe:Array<String> = variable.split('.');
 			if(killMe.length > 1) {
 				var coverMeInPiss:Dynamic = Reflect.getProperty(EditorPlayState.instance, killMe[0]);
@@ -93,7 +93,7 @@ class EditorLua {
 			}
 			return Reflect.setProperty(EditorPlayState.instance, variable, value);
 		});
-		Lua_helper.add_callback(lua, "getPropertyFromGroup", function(obj:String, index:Int, variable:Dynamic) {
+		set("getPropertyFromGroup", function(obj:String, index:Int, variable:Dynamic) {
 			if(Std.isOfType(Reflect.getProperty(EditorPlayState.instance, obj), FlxTypedGroup)) {
 				return Reflect.getProperty(Reflect.getProperty(EditorPlayState.instance, obj).members[index], variable);
 			}
@@ -107,7 +107,7 @@ class EditorLua {
 			}
 			return null;
 		});
-		Lua_helper.add_callback(lua, "setPropertyFromGroup", function(obj:String, index:Int, variable:Dynamic, value:Dynamic) {
+		set("setPropertyFromGroup", function(obj:String, index:Int, variable:Dynamic, value:Dynamic) {
 			if(Std.isOfType(Reflect.getProperty(EditorPlayState.instance, obj), FlxTypedGroup)) {
 				return Reflect.setProperty(Reflect.getProperty(EditorPlayState.instance, obj).members[index], variable, value);
 			}
@@ -120,7 +120,7 @@ class EditorLua {
 				return Reflect.setProperty(leArray, variable, value);
 			}
 		});
-		Lua_helper.add_callback(lua, "removeFromGroup", function(obj:String, index:Int, dontDestroy:Bool = false) {
+		set("removeFromGroup", function(obj:String, index:Int, dontDestroy:Bool = false) {
 			if(Std.isOfType(Reflect.getProperty(EditorPlayState.instance, obj), FlxTypedGroup)) {
 				var sex = Reflect.getProperty(EditorPlayState.instance, obj).members[index];
 				if(!dontDestroy)
@@ -133,12 +133,12 @@ class EditorLua {
 			Reflect.getProperty(EditorPlayState.instance, obj).remove(Reflect.getProperty(EditorPlayState.instance, obj)[index]);
 		});
 
-		Lua_helper.add_callback(lua, "getColorFromHex", function(color:String) {
+		set("getColorFromHex", function(color:String) {
 			if(!color.startsWith('0x')) color = '0xff' + color;
 			return Std.parseInt(color);
 		});
 
-		Lua_helper.add_callback(lua, "setGraphicSize", function(obj:String, x:Int, y:Int = 0) {
+		set("setGraphicSize", function(obj:String, x:Int, y:Int = 0) {
 			var poop:FlxSprite = Reflect.getProperty(EditorPlayState.instance, obj);
 			if(poop != null) {
 				poop.setGraphicSize(x, y);
@@ -146,7 +146,7 @@ class EditorLua {
 				return;
 			}
 		});
-		Lua_helper.add_callback(lua, "scaleObject", function(obj:String, x:Float, y:Float) {
+		set("scaleObject", function(obj:String, x:Float, y:Float) {
 			var poop:FlxSprite = Reflect.getProperty(EditorPlayState.instance, obj);
 			if(poop != null) {
 				poop.scale.set(x, y);
@@ -154,7 +154,7 @@ class EditorLua {
 				return;
 			}
 		});
-		Lua_helper.add_callback(lua, "updateHitbox", function(obj:String) {
+		set("updateHitbox", function(obj:String) {
 			var poop:FlxSprite = Reflect.getProperty(EditorPlayState.instance, obj);
 			if(poop != null) {
 				poop.updateHitbox();
@@ -162,9 +162,25 @@ class EditorLua {
 			}
 		});
 
-		Discord.addLuaCallbacks(lua);
+		set("changePresence", function(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float) {
+			Discord.changePresence(details, state, smallImageKey, hasStartTimestamp, endTimestamp);
+		});
 
 		call('onCreate', []);
+		#end
+	}
+
+	public function set(variable:String, data:Dynamic) {
+		#if LUA_ALLOWED
+		if(lua == null) return;
+
+		if (Type.typeof(data) == TFunction) {
+			Lua_helper.add_callback(lua, variable, data);
+			return;
+		}
+
+		Convert.toLua(lua, data);
+		Lua.setglobal(lua, variable);
 		#end
 	}
 	
@@ -209,17 +225,6 @@ class EditorLua {
 		return false;
 	}
 	#end
-
-	public function set(variable:String, data:Dynamic) {
-		#if LUA_ALLOWED
-		if(lua == null) {
-			return;
-		}
-
-		Convert.toLua(lua, data);
-		Lua.setglobal(lua, variable);
-		#end
-	}
 
 	#if LUA_ALLOWED
 	public function getBool(variable:String) {
