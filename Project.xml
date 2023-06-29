@@ -112,6 +112,8 @@
 		<assets path='example_mods' rename='mods' />
 	</section>
 
+	<assets path="assets/fonts" />
+
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxedev set='webgl' />
