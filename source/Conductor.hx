@@ -1,11 +1,6 @@
 package;
 
-import Song.SwagSong;
-
-/**
- * ...
- * @author
- */
+import Song;
 
 typedef BPMChangeEvent =
 {

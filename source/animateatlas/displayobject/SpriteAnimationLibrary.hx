@@ -1,18 +1,10 @@
 package animateatlas.displayobject;
 
 import openfl.display.BitmapData;
-import animateatlas.JSONData.AnimationData;
-import animateatlas.JSONData.ElementData;
-import animateatlas.JSONData.LayerFrameData;
-import animateatlas.JSONData.LayerData;
-import animateatlas.JSONData.SymbolTimelineData;
-import animateatlas.JSONData.Matrix3DData;
-import animateatlas.JSONData.AtlasData;
-import animateatlas.JSONData.SymbolData;
-import animateatlas.JSONData.SpriteData;
-import animateatlas.HelperEnums.LoopMode;
-import animateatlas.HelperEnums.SymbolType;
 import openfl.errors.ArgumentError;
+
+import animateatlas.JSONData;
+import animateatlas.HelperEnums;
 
 /**
  * Performance will be REALLY BAD.

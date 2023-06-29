@@ -8,28 +8,10 @@ import llua.Convert;
 #end
 
 import flixel.FlxG;
-import flixel.tweens.FlxTween;
-import flixel.tweens.FlxEase;
-import flixel.text.FlxText;
-import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.math.FlxPoint;
-import flixel.sound.FlxSound;
-import flixel.util.FlxTimer;
 import flixel.FlxSprite;
-import flixel.FlxCamera;
-import flixel.util.FlxColor;
-import flixel.FlxBasic;
-#if sys
-import sys.FileSystem;
-import sys.io.File;
-#end
-import Type.ValueType;
-import Controls;
-import DialogueBoxPsych;
+import flixel.group.FlxGroup;
 
-#if desktop
-import Discord;
-#end
+import Type;
 
 using StringTools;
 
@@ -180,7 +162,7 @@ class EditorLua {
 			}
 		});
 
-		Discord.DiscordClient.addLuaCallbacks(lua);
+		Discord.addLuaCallbacks(lua);
 
 		call('onCreate', []);
 		#end

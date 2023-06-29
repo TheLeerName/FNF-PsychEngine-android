@@ -1,20 +1,11 @@
 package animateatlas.tilecontainer;
 
 import openfl.display.Tileset;
-import haxe.Constraints.Constructible;
 import openfl.display.BitmapData;
-import animateatlas.JSONData.AnimationData;
-import animateatlas.JSONData.ElementData;
-import animateatlas.JSONData.LayerFrameData;
-import animateatlas.JSONData.LayerData;
-import animateatlas.JSONData.SymbolTimelineData;
-import animateatlas.JSONData.Matrix3DData;
-import animateatlas.JSONData.AtlasData;
-import animateatlas.JSONData.SymbolData;
-import animateatlas.JSONData.SpriteData;
-import animateatlas.HelperEnums.LoopMode;
-import animateatlas.HelperEnums.SymbolType;
 import openfl.errors.ArgumentError;
+
+import animateatlas.JSONData;
+import animateatlas.HelperEnums;
 
 /**
  * Since we can extract symbols from the exported timeline and instance them separatedly, this keeps track of all symbols.

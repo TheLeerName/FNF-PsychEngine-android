@@ -1,8 +1,8 @@
 package animateatlas.tilecontainer;
 
-import animateatlas.HelperEnums.LoopMode;
-import animateatlas.HelperEnums.SymbolType;
 import openfl.display.TileContainer;
+
+import animateatlas.HelperEnums;
 
 @:access(animateatlas.tilecontainer.TileContainerSymbol)
 class TileContainerMovieClip extends TileContainer {

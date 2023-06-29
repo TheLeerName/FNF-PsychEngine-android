@@ -1,26 +1,20 @@
 package animateatlas;
-import flixel.util.FlxDestroyUtil;
-import openfl.geom.Rectangle;
-import flixel.math.FlxPoint;
-import flixel.math.FlxRect;
-import openfl.Assets;
+
 import haxe.Json;
+
+import openfl.geom.Rectangle;
 import openfl.display.BitmapData;
-import animateatlas.JSONData.AtlasData;
-import animateatlas.JSONData.AnimationData;
-import animateatlas.displayobject.SpriteAnimationLibrary;
-import animateatlas.displayobject.SpriteMovieClip;
-import flixel.graphics.FlxGraphic;
-import flixel.graphics.frames.FlxFramesCollection;
-import flixel.graphics.frames.FlxFrame;
+
+import flixel.math.FlxRect;
+import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
-#if desktop
-import sys.FileSystem;
-import sys.io.File;
-#else
-import js.html.FileSystem;
-import js.html.File;
-#end
+import flixel.graphics.FlxGraphic;
+import flixel.graphics.frames.FlxFrame;
+import flixel.graphics.frames.FlxFramesCollection;
+
+import animateatlas.JSONData;
+import animateatlas.displayobject.SpriteMovieClip;
+import animateatlas.displayobject.SpriteAnimationLibrary;
 
 using StringTools;
 class AtlasFrameMaker extends FlxFramesCollection

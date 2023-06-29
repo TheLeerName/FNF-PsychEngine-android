@@ -1,23 +1,23 @@
 package;
 
-#if desktop
-import Discord.DiscordClient;
-#end
-import flash.text.TextField;
+import openfl.text.TextField;
+
+import lime.utils.Assets;
+
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.addons.display.FlxGridOverlay;
-import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
-import flixel.tweens.FlxTween;
+import flixel.group.FlxGroup;
 import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.addons.display.FlxGridOverlay;
+
 #if MODS_ALLOWED
 import sys.FileSystem;
 import sys.io.File;
 #end
-import lime.utils.Assets;
 
 using StringTools;
 

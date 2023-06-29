@@ -1,27 +1,23 @@
 package;
 
-import animateatlas.AtlasFrameMaker;
-import flixel.math.FlxPoint;
-import flixel.graphics.frames.FlxFrame.FlxFrameAngle;
-import openfl.geom.Rectangle;
-import flixel.math.FlxRect;
-import haxe.xml.Access;
+import haxe.Json;
+
+import openfl.media.Sound;
 import openfl.system.System;
-import flixel.FlxG;
-import flixel.graphics.frames.FlxAtlasFrames;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
+import openfl.display.BitmapData;
+
 import lime.utils.Assets;
-import flixel.FlxSprite;
+
+import flixel.FlxG;
+import flixel.graphics.FlxGraphic;
+import flixel.graphics.frames.FlxAtlasFrames;
+
 #if sys
 import sys.io.File;
 import sys.FileSystem;
 #end
-import flixel.graphics.FlxGraphic;
-import openfl.display.BitmapData;
-import haxe.Json;
-
-import flash.media.Sound;
 
 using StringTools;
 

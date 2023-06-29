@@ -1,29 +1,21 @@
 package animateatlas.displayobject;
 
+import openfl.geom.Point;
+import openfl.geom.Matrix;
+import openfl.geom.Rectangle;
+import openfl.geom.ColorTransform;
+import openfl.errors.Error;
+import openfl.errors.ArgumentError;
 import openfl.filters.GlowFilter;
 import openfl.filters.BlurFilter;
-import openfl.display.PixelSnapping;
-import openfl.geom.Point;
-import openfl.display.BitmapData;
-import openfl.display.Bitmap;
 import openfl.display.Sprite;
-import openfl.errors.ArgumentError;
-import openfl.geom.Rectangle;
-import openfl.errors.Error;
-import animateatlas.JSONData.ElementData;
-import animateatlas.HelperEnums.LoopMode;
-import animateatlas.HelperEnums.SymbolType;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 import openfl.display.FrameLabel;
-import animateatlas.JSONData.SymbolData;
-import animateatlas.JSONData.SymbolInstanceData;
-import animateatlas.JSONData.LayerData;
-import animateatlas.JSONData.BitmapPosData;
-import animateatlas.JSONData.Matrix3DData;
-import animateatlas.JSONData.LayerFrameData;
-import animateatlas.JSONData.ColorData;
-import openfl.geom.Matrix;
-import openfl.geom.ColorTransform;
-import animateatlas.JSONData.FilterData;
+import openfl.display.PixelSnapping;
+
+import animateatlas.JSONData;
+import animateatlas.HelperEnums;
 
 class SpriteSymbol extends Sprite {
 	public var currentLabel(get, never):String;

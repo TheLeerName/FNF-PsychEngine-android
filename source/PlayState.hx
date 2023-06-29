@@ -1,69 +1,72 @@
 package;
 
-import flixel.graphics.FlxGraphic;
-#if desktop
-import Discord.DiscordClient;
-#end
-import Section.SwagSection;
-import Song.SwagSong;
-import WiggleEffect.WiggleEffectType;
-import flixel.FlxBasic;
-import flixel.FlxCamera;
-import flixel.FlxG;
-import flixel.FlxGame;
-import flixel.FlxObject;
-import flixel.FlxSprite;
-import flixel.FlxState;
-import flixel.FlxSubState;
-import flixel.addons.display.FlxGridOverlay;
-import flixel.addons.effects.FlxTrail;
-import flixel.addons.effects.FlxTrailArea;
-import flixel.addons.effects.chainable.FlxEffectSprite;
-import flixel.addons.effects.chainable.FlxWaveEffect;
-import flixel.addons.transition.FlxTransitionableState;
-import flixel.graphics.atlas.FlxAtlas;
-import flixel.graphics.frames.FlxAtlasFrames;
-import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.math.FlxMath;
-import flixel.math.FlxPoint;
-import flixel.math.FlxRect;
-import flixel.sound.FlxSound;
-import flixel.text.FlxText;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
-import flixel.ui.FlxBar;
-import flixel.util.FlxCollision;
-import flixel.util.FlxColor;
-import flixel.util.FlxSort;
-import flixel.util.FlxStringUtil;
-import flixel.util.FlxTimer;
 import haxe.Json;
-import lime.utils.Assets;
+
 import openfl.Lib;
 import openfl.display.BlendMode;
 import openfl.display.StageQuality;
 import openfl.filters.BitmapFilter;
-import openfl.utils.Assets as OpenFlAssets;
-import editors.ChartingState;
-import editors.CharacterEditorState;
-import flixel.group.FlxSpriteGroup;
-import flixel.input.keyboard.FlxKey;
-import Note.EventNote;
 import openfl.events.KeyboardEvent;
+import openfl.utils.Assets as OpenFlAssets;
+
+import lime.utils.Assets;
+
+import flixel.FlxG;
+import flixel.FlxGame;
+import flixel.FlxState;
+import flixel.FlxBasic;
+import flixel.FlxCamera;
+import flixel.FlxObject;
+import flixel.FlxSprite;
+import flixel.FlxSubState;
+import flixel.ui.FlxBar;
+import flixel.util.FlxSave;
+import flixel.util.FlxSort;
+import flixel.util.FlxTimer;
+import flixel.util.FlxColor;
+import flixel.util.FlxCollision;
+import flixel.util.FlxStringUtil;
+import flixel.text.FlxText;
+import flixel.math.FlxRect;
+import flixel.math.FlxMath;
+import flixel.math.FlxPoint;
+import flixel.sound.FlxSound;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.group.FlxGroup;
+import flixel.group.FlxSpriteGroup;
+import flixel.graphics.FlxGraphic;
+import flixel.animation.FlxAnimationController;
+import flixel.input.keyboard.FlxKey;
+import flixel.graphics.atlas.FlxAtlas;
+import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.effects.particles.FlxEmitter;
 import flixel.effects.particles.FlxParticle;
-import flixel.util.FlxSave;
-import flixel.animation.FlxAnimationController;
+import flixel.addons.effects.FlxTrail;
+import flixel.addons.effects.FlxTrailArea;
+import flixel.addons.display.FlxGridOverlay;
+import flixel.addons.effects.chainable.FlxWaveEffect;
+import flixel.addons.effects.chainable.FlxEffectSprite;
+import flixel.addons.transition.FlxTransitionableState;
+
+import editors.ChartingState;
+import editors.CharacterEditorState;
+
 import animateatlas.AtlasFrameMaker;
-import Achievements;
+
+import Note;
+import Song;
+import Section;
 import StageData;
 import FunkinLua;
+import Conductor;
+import Achievements;
+import WiggleEffect;
 import DialogueBoxPsych;
-import Conductor.Rating;
 
 #if !flash 
-import flixel.addons.display.FlxRuntimeShader;
 import openfl.filters.ShaderFilter;
+import flixel.addons.display.FlxRuntimeShader;
 #end
 
 #if sys

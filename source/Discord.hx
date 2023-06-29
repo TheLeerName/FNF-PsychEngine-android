@@ -9,7 +9,8 @@ import llua.Lua;
 import llua.State;
 #end
 
-class DiscordClient
+typedef DiscordClient = Discord;
+class Discord
 {
 	public static var isInitialized:Bool = false;
 	public function new()
@@ -68,7 +69,7 @@ class DiscordClient
 	{
 		var DiscordDaemon = sys.thread.Thread.create(() ->
 		{
-			new DiscordClient();
+			new Discord();
 		});
 		trace("Discord Client initialized");
 		isInitialized = true;

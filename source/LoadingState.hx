@@ -1,20 +1,20 @@
 package;
 
-import lime.app.Promise;
-import lime.app.Future;
-import flixel.FlxG;
-import flixel.FlxState;
-import flixel.FlxSprite;
-import flixel.graphics.frames.FlxAtlasFrames;
-import flixel.util.FlxTimer;
-import flixel.math.FlxMath;
+import haxe.io.Path;
 
 import openfl.utils.Assets;
+
+import lime.app.Future;
+import lime.app.Promise;
 import lime.utils.Assets as LimeAssets;
 import lime.utils.AssetLibrary;
 import lime.utils.AssetManifest;
 
-import haxe.io.Path;
+import flixel.FlxG;
+import flixel.FlxState;
+import flixel.FlxSprite;
+import flixel.math.FlxMath;
+import flixel.util.FlxTimer;
 
 class LoadingState extends MusicBeatState
 {

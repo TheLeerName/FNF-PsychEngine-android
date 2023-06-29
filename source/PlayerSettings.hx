@@ -1,9 +1,9 @@
 package;
 
-import Controls;
-import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.util.FlxSignal;
+
+import Controls;
 
 // import ui.DeviceManager;
 // import props.Player;

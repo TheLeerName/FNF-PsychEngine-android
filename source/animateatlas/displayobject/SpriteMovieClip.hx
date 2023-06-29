@@ -1,8 +1,8 @@
 package animateatlas.displayobject;
 
 import openfl.display.Sprite;
-import animateatlas.HelperEnums.LoopMode;
-import animateatlas.HelperEnums.SymbolType;
+
+import animateatlas.HelperEnums;
 
 @:access(animateatlas.displayobject.SpriteSymbol)
 class SpriteMovieClip extends Sprite {

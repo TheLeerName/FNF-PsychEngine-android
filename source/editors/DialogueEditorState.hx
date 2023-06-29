@@ -1,33 +1,26 @@
 package editors;
 
-#if desktop
-import Discord.DiscordClient;
-#end
+import haxe.Json;
+
+import openfl.events.Event;
+import openfl.events.IOErrorEvent;
+import openfl.net.FileFilter;
+import openfl.net.FileReference;
+
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.addons.display.FlxGridOverlay;
-import flixel.addons.transition.FlxTransitionableState;
-import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.math.FlxMath;
 import flixel.text.FlxText;
+import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
-import flixel.sound.FlxSound;
-import flixel.addons.ui.FlxInputText;
-import flixel.addons.ui.FlxUI9SliceSprite;
 import flixel.addons.ui.FlxUI;
+import flixel.addons.ui.FlxUITabMenu;
 import flixel.addons.ui.FlxUICheckBox;
 import flixel.addons.ui.FlxUIInputText;
 import flixel.addons.ui.FlxUINumericStepper;
-import flixel.addons.ui.FlxUITabMenu;
-import flixel.ui.FlxButton;
-import openfl.net.FileReference;
-import openfl.events.Event;
-import openfl.events.IOErrorEvent;
-import flash.net.FileFilter;
-import haxe.Json;
+
 import DialogueBoxPsych;
-import lime.system.Clipboard;
 import Alphabet;
+
 #if sys
 import sys.io.File;
 #end

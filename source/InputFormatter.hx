@@ -1,4 +1,5 @@
-import flixel.FlxG;
+package;
+
 import flixel.input.keyboard.FlxKey;
 
 using StringTools;

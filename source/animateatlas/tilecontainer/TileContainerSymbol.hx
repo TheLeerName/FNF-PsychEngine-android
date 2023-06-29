@@ -1,26 +1,15 @@
 package animateatlas.tilecontainer;
 
-import openfl.display.Tileset;
-import animateatlas.JSONData.PointData;
-import openfl.errors.ArgumentError;
-import openfl.geom.Rectangle;
 import openfl.errors.Error;
-import animateatlas.JSONData.ElementData;
-import animateatlas.HelperEnums.LoopMode;
-import animateatlas.HelperEnums.SymbolType;
-import openfl.display.FrameLabel;
-import animateatlas.JSONData.SymbolData;
-import animateatlas.JSONData.SymbolInstanceData;
-import animateatlas.JSONData.LayerData;
-import animateatlas.JSONData.BitmapPosData;
-import animateatlas.JSONData.Matrix3DData;
-import animateatlas.JSONData.LayerFrameData;
-import animateatlas.JSONData.ColorData;
-import openfl.geom.Matrix;
+import openfl.geom.Rectangle;
 import openfl.geom.ColorTransform;
-import openfl.display.DisplayObjectContainer;
-import openfl.display.TileContainer;
 import openfl.display.Tile;
+import openfl.display.Tileset;
+import openfl.display.FrameLabel;
+import openfl.display.TileContainer;
+
+import animateatlas.JSONData;
+import animateatlas.HelperEnums;
 
 class TileContainerSymbol extends TileContainer {
 	public var currentLabel(get, never):String;
