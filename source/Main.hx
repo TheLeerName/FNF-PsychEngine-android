@@ -4,6 +4,7 @@ import openfl.Lib;
 import openfl.events.Event;
 import openfl.display.FPS;
 import openfl.display.Sprite;
+import openfl.display.StageScaleMode;
 
 import lime.app.Application;
 
@@ -102,10 +103,10 @@ class Main extends Sprite
 		#end
 
 		#if desktop
-		if (!DiscordClient.isInitialized) {
-			DiscordClient.initialize();
+		if (!Discord.isInitialized) {
+			Discord.initialize();
 			Application.current.window.onClose.add(function() {
-				DiscordClient.shutdown();
+				Discord.shutdown();
 			});
 		}
 		#end
