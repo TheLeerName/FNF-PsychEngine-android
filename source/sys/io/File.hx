@@ -32,28 +32,28 @@ using StringTools;
 @:coreApi
 class File {
 	public static function getContent(path:String):String {
-		return NativeFile.file_contents_string(path);
+		return NativeFile.file_contents_string(makeCompatiblePath(path));
 	}
 
 	public static function getBytes(path:String):haxe.io.Bytes {
-		var data = NativeFile.file_contents_bytes(path);
+		var data = NativeFile.file_contents_bytes(makeCompatiblePath(path));
 		return haxe.io.Bytes.ofData(data);
 	}
 
 	public static function saveContent(path:String, content:String):Void {
-		var f = write(path);
+		var f = write(makeCompatiblePath(path));
 		f.writeString(content);
 		f.close();
 	}
 
 	public static function saveBytes(path:String, bytes:haxe.io.Bytes):Void {
-		var f = write(path);
+		var f = write(makeCompatiblePath(path));
 		f.write(bytes);
 		f.close();
 	}
 
 	public static function read(path:String, binary:Bool = true):FileInput {
-		return untyped new FileInput(NativeFile.file_open(path, (if (binary) "rb" else "r")));
+		return untyped new FileInput(NativeFile.file_open(makeCompatiblePath(path), (if (binary) "rb" else "r")));
 	}
 
 	public static function write(path:String, binary:Bool = true):FileOutput {
@@ -61,10 +61,11 @@ class File {
 	}
 
 	public static function append(path:String, binary:Bool = true):FileOutput {
-		return untyped new FileOutput(NativeFile.file_open(path, (if (binary) "ab" else "a")));
+		return untyped new FileOutput(NativeFile.file_open(makeCompatiblePath(path), (if (binary) "ab" else "a")));
 	}
 
 	public static function update(path:String, binary:Bool = true):FileOutput {
+		path = makeCompatiblePath(path);
 		if (!FileSystem.exists(path)) {
 			write(path).close();
 		}
@@ -72,8 +73,8 @@ class File {
 	}
 
 	public static function copy(srcPath:String, dstPath:String):Void {
-		var s = read(srcPath, true);
-		var d = write(dstPath, true);
+		var s = read(makeCompatiblePath(srcPath), true);
+		var d = write(makeCompatiblePath(dstPath), true);
 		d.writeInput(s);
 		s.close();
 		d.close();
