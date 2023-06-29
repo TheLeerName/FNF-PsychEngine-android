@@ -16,6 +16,7 @@ haxelib install hscript 2.5.0
 haxelib install actuate 1.9.0
 haxelib install hxCodec 2.5.1
 haxelib install hxcpp-debug-server 1.2.4
+haxelib install extension-androidtools 1.8.2
 haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
 haxelib git linc_luajit https://github.com/TheLeerName/linc_luajit
 haxelib run lime setup

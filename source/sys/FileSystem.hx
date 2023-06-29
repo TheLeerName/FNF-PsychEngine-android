@@ -24,6 +24,11 @@ package sys;
 
 import cpp.NativeSys;
 
+#if android
+import android.content.Context; // haxelib git extension-androidtools https://github.com/MAJigsaw77/extension-androidtools
+using StringTools;
+#end
+
 @:buildXml('<include name="${HXCPP}/src/hx/libs/std/Build.xml"/>')
 @:coreApi
 class FileSystem {
@@ -32,7 +37,7 @@ class FileSystem {
 	}
 
 	public static function rename(path:String, newPath:String):Void {
-		NativeSys.sys_rename(path, newPath);
+		NativeSys.sys_rename(makeCompatiblePath(path), makeCompatiblePath(newPath));
 	}
 
 	public static function stat(path:String):FileStat {
@@ -58,10 +63,20 @@ class FileSystem {
 	}
 
 	public static function fullPath(relPath:String):String {
+		#if android // to avoid crash lol
+		return Context.getExternalFilesDir() + '/' + relPath;
+		#end
+
 		return NativeSys.file_full_path(relPath);
 	}
 
 	public static function absolutePath(relPath:String):String {
+		#if android // to avoid crash lol
+		if (relPath.startsWith(Context.getExternalFilesDir()))
+			return relPath;
+		return Context.getExternalFilesDir() + '/' + relPath;
+		#end
+
 		if (haxe.io.Path.isAbsolute(relPath))
 			return relPath;
 		return haxe.io.Path.join([Sys.getCwd(), relPath]);
@@ -76,7 +91,7 @@ class FileSystem {
 	}
 
 	public static function createDirectory(path:String):Void {
-		var path = haxe.io.Path.addTrailingSlash(path);
+		var path = haxe.io.Path.addTrailingSlash(makeCompatiblePath(path));
 		var _p = null;
 		var parts = [];
 		while (path != (_p = haxe.io.Path.directory(path))) {
@@ -84,24 +99,30 @@ class FileSystem {
 			path = _p;
 		}
 		for (part in parts) {
-			if (part.charCodeAt(part.length - 1) != ":".code && !exists(part) && !NativeSys.sys_create_dir(part, 493))
+			if (part.charCodeAt(part.length - 1) != ":".code && !NativeSys.sys_exists(part) && !NativeSys.sys_create_dir(part, 493))
 				throw "Could not create directory:" + part;
 		}
 	}
 
 	public static function deleteFile(path:String):Void {
-		NativeSys.file_delete(path);
+		NativeSys.file_delete(makeCompatiblePath(path));
 	}
 
 	public static function deleteDirectory(path:String):Void {
-		NativeSys.sys_remove_dir(path);
+		NativeSys.sys_remove_dir(makeCompatiblePath((path)));
 	}
 
 	public static function readDirectory(path:String):Array<String> {
-		return NativeSys.sys_read_dir(path);
+		return NativeSys.sys_read_dir(makeCompatiblePath(path));
 	}
 
 	private static inline function makeCompatiblePath(path:String):String {
+		#if android
+		if (!path.startsWith('/storage/emulated/0/') && !path.startsWith('/data/user/0/') && !path.startsWith('/mnt/sdcard/'))
+			path = Context.getExternalFilesDir() + '/' + path;
+		//trace('used path: ' + path);
+		#end
+
 		return if (path.charCodeAt(1) == ":".code && path.length <= 3) {
 			haxe.io.Path.addTrailingSlash(path);
 		} else if (path == "/") {

@@ -24,6 +24,11 @@ package sys.io;
 
 import cpp.NativeFile;
 
+#if android
+import android.content.Context; // haxelib git extension-androidtools https://github.com/MAJigsaw77/extension-androidtools
+using StringTools;
+#end
+
 @:coreApi
 class File {
 	public static function getContent(path:String):String {
@@ -52,7 +57,7 @@ class File {
 	}
 
 	public static function write(path:String, binary:Bool = true):FileOutput {
-		return untyped new FileOutput(NativeFile.file_open(path, (if (binary) "wb" else "w")));
+		return untyped new FileOutput(NativeFile.file_open(makeCompatiblePath(path), (if (binary) "wb" else "w")));
 	}
 
 	public static function append(path:String, binary:Bool = true):FileOutput {
@@ -72,5 +77,21 @@ class File {
 		d.writeInput(s);
 		s.close();
 		d.close();
+	}
+
+    private static inline function makeCompatiblePath(path:String):String {
+		#if android
+		if (!path.startsWith('/storage/emulated/0/') && !path.startsWith('/data/user/0/') && !path.startsWith('/mnt/sdcard/'))
+			path = Context.getExternalFilesDir() + '/' + path;
+		//trace('used path: ' + path);
+		#end
+
+		return if (path.charCodeAt(1) == ":".code && path.length <= 3) {
+			haxe.io.Path.addTrailingSlash(path);
+		} else if (path == "/") {
+			"/";
+		} else {
+			haxe.io.Path.removeTrailingSlashes(path);
+		}
 	}
 }
