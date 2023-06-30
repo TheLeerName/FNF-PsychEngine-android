@@ -300,40 +300,58 @@ class Controls extends FlxActionSet
 	inline function get_RESET()
 		return _reset.check();
 
-	public static var sensitivity:Float = 0.1; // if 1, u need swipe entire screen lmao
+	/**
+	 * If initial mouse pos beyond `deadZone`, swipe will be registered
+	 */
+	public static var deadZone:Float = 25;
+	/**
+	 * In which degrees swipes will work
+	 */
 	public static var degreesOffset:Float = 25;
+	/**
+	 * If you want disable it
+	 */
+	//public static var swipeEnabled:Bool = #if android true #else false #end;
+	public static var swipeEnabled:Bool = true;
 
 	var mousePos:FlxPoint = FlxPoint.get();
+	/**
+	 * Swipe getting thingy, works if `swipeEnabled` is `true` only!
+	 * @param name Name of input from `Action` class
+	 * @param Trigger `JUST_PRESSED` / `PRESSED` / `JUST_RELEASED`
+	 * @return Bool
+	 */
 	function getSwipe(name:String, Trigger:FlxInputState = PRESSED):Bool {
+		if (!swipeEnabled) return false;
 		switch (Trigger) {
 			case JUST_PRESSED:
 				if (FlxG.swipes.length == 0) return false; // cuz game will crash without it
 				switch (name) {
 					case Action.UI_DOWN_P:
-						return FlxG.swipes[0].degrees > 0 && (FlxG.swipes[0].distance >= FlxG.height * sensitivity && Math.abs(FlxG.swipes[0].degrees) >= 90 - degreesOffset && Math.abs(FlxG.swipes[0].degrees) <= 90 + degreesOffset);
+						return FlxG.swipes[0].degrees > 0 && (FlxG.swipes[0].distance >= deadZone && Math.abs(FlxG.swipes[0].degrees) >= 90 - degreesOffset && Math.abs(FlxG.swipes[0].degrees) <= 90 + degreesOffset);
 					case Action.UI_UP_P:
-						return FlxG.swipes[0].degrees < 0 && (FlxG.swipes[0].distance >= FlxG.height * sensitivity && Math.abs(FlxG.swipes[0].degrees) >= 90 - degreesOffset && Math.abs(FlxG.swipes[0].degrees) <= 90 + degreesOffset);
+						return FlxG.swipes[0].degrees < 0 && (FlxG.swipes[0].distance >= deadZone && Math.abs(FlxG.swipes[0].degrees) >= 90 - degreesOffset && Math.abs(FlxG.swipes[0].degrees) <= 90 + degreesOffset);
 					case Action.UI_LEFT_P:
-						return Math.abs(FlxG.swipes[0].degrees) > 90 && (FlxG.swipes[0].distance >= FlxG.width * sensitivity && Math.abs(FlxG.swipes[0].degrees) >= 180 - degreesOffset && Math.abs(FlxG.swipes[0].degrees) <= 180 + degreesOffset);
+						return Math.abs(FlxG.swipes[0].degrees) > 90 && (FlxG.swipes[0].distance >= deadZone && Math.abs(FlxG.swipes[0].degrees) >= 180 - degreesOffset && Math.abs(FlxG.swipes[0].degrees) <= 180 + degreesOffset);
 					case Action.UI_RIGHT_P:
-						return Math.abs(FlxG.swipes[0].degrees) < 90 && (FlxG.swipes[0].distance >= FlxG.width * sensitivity && Math.abs(FlxG.swipes[0].degrees) >= -degreesOffset && Math.abs(FlxG.swipes[0].degrees) <= degreesOffset);
+						return Math.abs(FlxG.swipes[0].degrees) < 90 && (FlxG.swipes[0].distance >= deadZone && Math.abs(FlxG.swipes[0].degrees) >= -degreesOffset && Math.abs(FlxG.swipes[0].degrees) <= degreesOffset);
 				}
 			case PRESSED:
 				if (FlxG.mouse.justPressed) mousePos = FlxG.mouse.getPosition();
 				if (!FlxG.mouse.pressed) return false;
 				switch (name) {
 					case Action.UI_DOWN:
-						return FlxG.mouse.y - FlxG.height * sensitivity > mousePos.y;
+						return FlxG.mouse.y - deadZone > mousePos.y;
 					case Action.UI_UP:
-						return FlxG.mouse.y + FlxG.height * sensitivity < mousePos.y;
+						return FlxG.mouse.y + deadZone < mousePos.y;
 					case Action.UI_LEFT:
-						return FlxG.mouse.x + FlxG.width * sensitivity < mousePos.x;
+						return FlxG.mouse.x + deadZone < mousePos.x;
 					case Action.UI_RIGHT:
-						return FlxG.mouse.x - FlxG.width * sensitivity > mousePos.x;
+						return FlxG.mouse.x - deadZone > mousePos.x;
 				}
 			case JUST_RELEASED:
 				if (!FlxG.mouse.justReleased) return false;
-				return getSwipe(name, PRESSED);
+				return getSwipe(name, PRESSED); // idk not checked how it work
 			default:
 				// nothing
 		}
@@ -345,6 +363,7 @@ class Controls extends FlxActionSet
 	 */
 	public var menuItemsSelected:FlxBasic;
 	function getAccept():Bool {
+		if (!swipeEnabled) return false;
 		var overlapsCheck:Bool = true;
 		if (menuItemsSelected != null && menuItemsSelected.exists) overlapsCheck = FlxG.mouse.overlaps(menuItemsSelected, menuItemsSelected.cameras[0]);
 		return FlxG.mouse.justPressed && overlapsCheck;
