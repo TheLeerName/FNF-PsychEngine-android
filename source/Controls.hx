@@ -8,6 +8,9 @@ import flixel.input.actions.FlxActionSet;
 import flixel.input.actions.FlxActionInput;
 import flixel.input.actions.FlxActionManager;
 import flixel.input.gamepad.FlxGamepadInputID;
+#if android
+import flixel.input.android.FlxAndroidKey;
+#end
 
 #if (haxe >= "4.0.0")
 enum abstract Action(String) to String from String
@@ -346,6 +349,10 @@ class Controls extends FlxActionSet
 		add(_pause);
 		add(_reset);
 
+		#if android
+		_back.addAndroidKey(FlxAndroidKey.BACK, JUST_PRESSED);
+		_pause.addAndroidKey(FlxAndroidKey.BACK, JUST_PRESSED);
+		#end
 
 		for (action in digitalActions)
 			byName[action.name] = action;
