@@ -46,6 +46,37 @@ class Paths
 	];
 	#end
 
+	public static function makeModsFolder() {
+		#if MODS_ALLOWED
+		if (FileSystem.exists("mods")) return;
+		FileSystem.createDirectory('mods');
+
+		File.saveContent('mods/readme.txt', 'You can either edit files or add entirely new ones here.\n\nABOUT EDITING:\nIt doesn\'t matter if you want to edit something in assets/shared/images/ or assets/preload/images/,\nyou will have to put the editted files in mods/images/, it will be handled automatically by the engine.');
+
+		var json = {name: "Name", description: "Description", restart: false, runsGlobally: false, color: [170, 0, 255]};
+		File.saveContent('mods/pack.json', Json.stringify(json, '\t'));
+
+		for (folder in ignoreModFolders) if (folder != 'achievements') { // nah shadowmario not did it
+			FileSystem.createDirectory('mods/$folder');
+			File.saveContent('mods/$folder/readme.txt', 'Put your $folder here!');
+		}
+
+		var imagesFolder:Array<String> = [
+			'characters',
+			'dialogue',
+			'icons',
+			'menubackgrounds',
+			'menucharacters',
+			'storymenu'
+		];
+		for (folder in imagesFolder) {
+			FileSystem.createDirectory('mods/images/$folder');
+			File.saveContent('mods/images/$folder/readme.txt', 'Put your $folder images here!');
+		}
+		trace('Successfully created mods directory!');
+		#end
+	}
+
 	public static function excludeAsset(key:String) {
 		if (!dumpExclusions.contains(key))
 			dumpExclusions.push(key);

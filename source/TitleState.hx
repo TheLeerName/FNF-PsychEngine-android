@@ -80,6 +80,7 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
+		Paths.makeModsFolder();
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 
