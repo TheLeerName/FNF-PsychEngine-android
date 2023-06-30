@@ -84,7 +84,7 @@ class File {
 		#if android
 		if (!path.startsWith('/storage/emulated/0/') && !path.startsWith('/data/user/0/') && !path.startsWith('/mnt/sdcard/'))
 			path = Context.getExternalFilesDir() + '/' + path;
-		//trace('used path: ' + path);
+		//trace('File => used path: ' + path);
 		#end
 
 		return if (path.charCodeAt(1) == ":".code && path.length <= 3) {

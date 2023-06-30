@@ -32,7 +32,7 @@ class MusicBeatState extends FlxUIState
 			openSubState(new CustomFadeTransition(0.7, true));
 		}
 		FlxTransitionableState.skipNextTransOut = false;
-		FlxG.mouse.visible = true;
+		#if desktop FlxG.mouse.visible = true; #end
 	}
 
 	override function update(elapsed:Float)
