@@ -376,6 +376,8 @@ class StoryMenuState extends MusicBeatState
 		if (curWeek < 0)
 			curWeek = loadedWeeks.length - 1;
 
+		controls.menuItemsSelected = grpWeekText.members[curWeek];
+
 		var leWeek:WeekData = loadedWeeks[curWeek];
 		WeekData.setDirectoryFromWeek(leWeek);
 

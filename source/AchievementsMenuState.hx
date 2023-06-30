@@ -90,6 +90,8 @@ class AchievementsMenuState extends MusicBeatState
 		if (curSelected >= options.length)
 			curSelected = 0;
 
+		//controls.menuItemsSelected = grpOptions.members[curSelected]; // commented cuz ACCEPT is not used
+
 		var bullShit:Int = 0;
 
 		for (item in grpOptions.members) {

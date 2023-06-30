@@ -125,8 +125,11 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		super();
 	}
 
+	var lastHitsoundVolume:Float = 0;
 	function onChangeHitsoundVolume()
 	{
-		FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.hitsoundVolume);
+		if (lastHitsoundVolume != ClientPrefs.hitsoundVolume)
+			FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.hitsoundVolume);
+		lastHitsoundVolume = ClientPrefs.hitsoundVolume;
 	}
 }

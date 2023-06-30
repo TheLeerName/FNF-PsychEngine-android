@@ -1,6 +1,8 @@
 package;
 
+import flixel.math.FlxPoint;
 import flixel.FlxG;
+import flixel.FlxBasic;
 import flixel.input.FlxInput;
 import flixel.input.keyboard.FlxKey;
 import flixel.input.actions.FlxAction;
@@ -161,62 +163,62 @@ class Controls extends FlxActionSet
 	public var UI_UP(get, never):Bool;
 
 	inline function get_UI_UP()
-		return _ui_up.check();
+		return _ui_up.check() || getSwipe(_ui_up.name, PRESSED);
 
 	public var UI_LEFT(get, never):Bool;
 
 	inline function get_UI_LEFT()
-		return _ui_left.check();
+		return _ui_left.check() || getSwipe(_ui_left.name, PRESSED);
 
 	public var UI_RIGHT(get, never):Bool;
 
 	inline function get_UI_RIGHT()
-		return _ui_right.check();
+		return _ui_right.check() || getSwipe(_ui_right.name, PRESSED);
 
 	public var UI_DOWN(get, never):Bool;
 
 	inline function get_UI_DOWN()
-		return _ui_down.check();
+		return _ui_down.check() || getSwipe(_ui_down.name, PRESSED);
 
 	public var UI_UP_P(get, never):Bool;
 
 	inline function get_UI_UP_P()
-		return _ui_upP.check() || getSwipe(_ui_upP.name);
+		return _ui_upP.check() || getSwipe(_ui_upP.name, JUST_PRESSED);
 
 	public var UI_LEFT_P(get, never):Bool;
 
 	inline function get_UI_LEFT_P()
-		return _ui_leftP.check() || getSwipe(_ui_leftP.name);
+		return _ui_leftP.check() || getSwipe(_ui_leftP.name, JUST_PRESSED);
 
 	public var UI_RIGHT_P(get, never):Bool;
 
 	inline function get_UI_RIGHT_P()
-		return _ui_rightP.check() || getSwipe(_ui_rightP.name);
+		return _ui_rightP.check() || getSwipe(_ui_rightP.name, JUST_PRESSED);
 
 	public var UI_DOWN_P(get, never):Bool;
 
 	inline function get_UI_DOWN_P()
-		return _ui_downP.check() || getSwipe(_ui_downP.name);
+		return _ui_downP.check() || getSwipe(_ui_downP.name, JUST_PRESSED);
 
 	public var UI_UP_R(get, never):Bool;
 
 	inline function get_UI_UP_R()
-		return _ui_upR.check();
+		return _ui_upR.check() || getSwipe(_ui_upR.name, JUST_RELEASED);
 
 	public var UI_LEFT_R(get, never):Bool;
 
 	inline function get_UI_LEFT_R()
-		return _ui_leftR.check();
+		return _ui_leftR.check() || getSwipe(_ui_leftR.name, JUST_RELEASED);
 
 	public var UI_RIGHT_R(get, never):Bool;
 
 	inline function get_UI_RIGHT_R()
-		return _ui_rightR.check();
+		return _ui_rightR.check() || getSwipe(_ui_rightR.name, JUST_RELEASED);
 
 	public var UI_DOWN_R(get, never):Bool;
 
 	inline function get_UI_DOWN_R()
-		return _ui_downR.check();
+		return _ui_downR.check() || getSwipe(_ui_downR.name, JUST_RELEASED);
 
 	public var NOTE_UP(get, never):Bool;
 
@@ -281,7 +283,7 @@ class Controls extends FlxActionSet
 	public var ACCEPT(get, never):Bool;
 
 	inline function get_ACCEPT()
-		return _accept.check() || getSwipe(_accept.name);
+		return _accept.check() || getAccept();
 
 	public var BACK(get, never):Bool;
 
@@ -298,21 +300,54 @@ class Controls extends FlxActionSet
 	inline function get_RESET()
 		return _reset.check();
 
-	public static var swipeSensitivity:Float = 0.1; // if 1, u need swipe entire screen lmao
-	public static var swipeDegreesOffset:Float = 25;
-	function getSwipe(name:String):Bool {
-		if (FlxG.swipes.length == 0) return false; // cuz game will crash without it
-		switch (name) {
-			case Action.UI_DOWN_P:
-				return FlxG.swipes[0].degrees > 0 && (FlxG.swipes[0].distance >= FlxG.height * swipeSensitivity && Math.abs(FlxG.swipes[0].degrees) >= 90 - swipeDegreesOffset && Math.abs(FlxG.swipes[0].degrees) <= 90 + swipeDegreesOffset);
-			case Action.UI_UP_P:
-				return FlxG.swipes[0].degrees < 0 && (FlxG.swipes[0].distance >= FlxG.height * swipeSensitivity && Math.abs(FlxG.swipes[0].degrees) >= 90 - swipeDegreesOffset && Math.abs(FlxG.swipes[0].degrees) <= 90 + swipeDegreesOffset);
-			case Action.UI_LEFT_P:
-				return Math.abs(FlxG.swipes[0].degrees) > 90 && (FlxG.swipes[0].distance >= FlxG.width * swipeSensitivity && Math.abs(FlxG.swipes[0].degrees) >= 180 - swipeDegreesOffset && Math.abs(FlxG.swipes[0].degrees) <= 180 + swipeDegreesOffset);
-			case Action.UI_RIGHT_P:
-				return Math.abs(FlxG.swipes[0].degrees) < 90 && (FlxG.swipes[0].distance >= FlxG.width * swipeSensitivity && Math.abs(FlxG.swipes[0].degrees) >= -swipeDegreesOffset && Math.abs(FlxG.swipes[0].degrees) <= swipeDegreesOffset);
+	public static var sensitivity:Float = 0.1; // if 1, u need swipe entire screen lmao
+	public static var degreesOffset:Float = 25;
+
+	var mousePos:FlxPoint = FlxPoint.get();
+	function getSwipe(name:String, Trigger:FlxInputState = PRESSED):Bool {
+		switch (Trigger) {
+			case JUST_PRESSED:
+				if (FlxG.swipes.length == 0) return false; // cuz game will crash without it
+				switch (name) {
+					case Action.UI_DOWN_P:
+						return FlxG.swipes[0].degrees > 0 && (FlxG.swipes[0].distance >= FlxG.height * sensitivity && Math.abs(FlxG.swipes[0].degrees) >= 90 - degreesOffset && Math.abs(FlxG.swipes[0].degrees) <= 90 + degreesOffset);
+					case Action.UI_UP_P:
+						return FlxG.swipes[0].degrees < 0 && (FlxG.swipes[0].distance >= FlxG.height * sensitivity && Math.abs(FlxG.swipes[0].degrees) >= 90 - degreesOffset && Math.abs(FlxG.swipes[0].degrees) <= 90 + degreesOffset);
+					case Action.UI_LEFT_P:
+						return Math.abs(FlxG.swipes[0].degrees) > 90 && (FlxG.swipes[0].distance >= FlxG.width * sensitivity && Math.abs(FlxG.swipes[0].degrees) >= 180 - degreesOffset && Math.abs(FlxG.swipes[0].degrees) <= 180 + degreesOffset);
+					case Action.UI_RIGHT_P:
+						return Math.abs(FlxG.swipes[0].degrees) < 90 && (FlxG.swipes[0].distance >= FlxG.width * sensitivity && Math.abs(FlxG.swipes[0].degrees) >= -degreesOffset && Math.abs(FlxG.swipes[0].degrees) <= degreesOffset);
+				}
+			case PRESSED:
+				if (FlxG.mouse.justPressed) mousePos = FlxG.mouse.getPosition();
+				if (!FlxG.mouse.pressed) return false;
+				switch (name) {
+					case Action.UI_DOWN:
+						return FlxG.mouse.y - FlxG.height * sensitivity > mousePos.y;
+					case Action.UI_UP:
+						return FlxG.mouse.y + FlxG.height * sensitivity < mousePos.y;
+					case Action.UI_LEFT:
+						return FlxG.mouse.x + FlxG.width * sensitivity < mousePos.x;
+					case Action.UI_RIGHT:
+						return FlxG.mouse.x - FlxG.width * sensitivity > mousePos.x;
+				}
+			case JUST_RELEASED:
+				if (!FlxG.mouse.justReleased) return false;
+				return getSwipe(name, PRESSED);
+			default:
+				// nothing
 		}
 		return false;
+	}
+
+	/**
+	 * Is mouse/touchpad just pressed and overlaps with `menuItemsSelected`?
+	 */
+	public var menuItemsSelected:FlxBasic;
+	function getAccept():Bool {
+		var overlapsCheck:Bool = true;
+		if (menuItemsSelected != null && menuItemsSelected.exists) overlapsCheck = FlxG.mouse.overlaps(menuItemsSelected, menuItemsSelected.cameras[0]);
+		return FlxG.mouse.justPressed && overlapsCheck;
 	}
 
 	public function new(name, scheme = None)

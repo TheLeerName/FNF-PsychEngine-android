@@ -297,6 +297,11 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			}
 		}
 
+		if (optionsArray[curSelected].type == 'bool')
+			controls.menuItemsSelected = getByID(checkboxGroup, curSelected);
+		else
+			controls.menuItemsSelected = null;
+
 		descBox.setPosition(descText.x - 10, descText.y - 10);
 		descBox.setGraphicSize(Std.int(descText.width + 20), Std.int(descText.height + 25));
 		descBox.updateHitbox();
@@ -307,6 +312,11 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		}
 		curOption = optionsArray[curSelected]; //shorter lol
 		FlxG.sound.play(Paths.sound('scrollMenu'));
+	}
+
+	function getByID(group:FlxTypedGroup<Dynamic>, id:Int):Dynamic {
+		for (th in group) if (th.ID == id) return th;
+		return null;
 	}
 
 	public function reloadBoyfriend()

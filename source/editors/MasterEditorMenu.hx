@@ -155,6 +155,8 @@ class MasterEditorMenu extends MusicBeatState
 			curSelected = options.length - 1;
 		if (curSelected >= options.length)
 			curSelected = 0;
+
+		controls.menuItemsSelected = grpTexts.members[curSelected];
 	}
 
 	#if MODS_ALLOWED

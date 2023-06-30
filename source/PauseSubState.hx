@@ -312,6 +312,8 @@ class PauseSubState extends MusicBeatSubstate
 		if (curSelected >= menuItems.length)
 			curSelected = 0;
 
+		controls.menuItemsSelected = grpMenuShit.members[curSelected];
+
 		var bullShit:Int = 0;
 
 		for (item in grpMenuShit.members)

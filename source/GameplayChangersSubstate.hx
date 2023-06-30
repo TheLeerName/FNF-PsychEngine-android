@@ -333,6 +333,8 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		if (curSelected >= optionsArray.length)
 			curSelected = 0;
 
+		controls.menuItemsSelected = grpOptions.members[curSelected];
+
 		var bullShit:Int = 0;
 
 		for (item in grpOptions.members) {

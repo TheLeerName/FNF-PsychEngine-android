@@ -90,6 +90,7 @@ class OptionsState extends MusicBeatState
 
 	override function closeSubState() {
 		super.closeSubState();
+		changeSelection();
 		ClientPrefs.saveSettings();
 	}
 
@@ -135,6 +136,9 @@ class OptionsState extends MusicBeatState
 				selectorRight.y = item.y;
 			}
 		}
+
+		controls.menuItemsSelected = grpOptions.members[curSelected];
+
 		FlxG.sound.play(Paths.sound('scrollMenu'));
 	}
 }
