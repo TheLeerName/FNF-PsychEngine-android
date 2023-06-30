@@ -302,7 +302,6 @@ class Controls extends FlxActionSet
 	public static var swipeDegreesOffset:Float = 25;
 	function getSwipe(name:String):Bool {
 		if (FlxG.swipes.length == 0) return false; // cuz game will crash without it
-		trace(FlxG.swipes[0].degrees);
 		switch (name) {
 			case Action.UI_DOWN_P:
 				return FlxG.swipes[0].degrees > 0 && (FlxG.swipes[0].distance >= FlxG.height * swipeSensitivity && Math.abs(FlxG.swipes[0].degrees) >= 90 - swipeDegreesOffset && Math.abs(FlxG.swipes[0].degrees) <= 90 + swipeDegreesOffset);
