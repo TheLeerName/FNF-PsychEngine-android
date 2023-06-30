@@ -266,7 +266,7 @@ class FreeplayState extends MusicBeatState
 
 		var upP = controls.UI_UP_P;
 		var downP = controls.UI_DOWN_P;
-		var accepted = controls.ACCEPT;
+		var accepted = controls.ACCEPT || (!FlxG.mouse.justMoved && FlxG.mouse.justPressed && FlxG.mouse.overlaps(grpSongs.members[curSelected], grpSongs.cameras[0]));
 		var space = FlxG.keys.justPressed.SPACE;
 		var ctrl = FlxG.keys.justPressed.CONTROL;
 
