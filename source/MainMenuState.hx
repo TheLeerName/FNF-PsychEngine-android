@@ -202,7 +202,7 @@ class MainMenuState extends MusicBeatState
 				MusicBeatState.switchState(new TitleState());
 			}
 
-			if (controls.ACCEPT || (!FlxG.mouse.justMoved && FlxG.mouse.justPressed && FlxG.mouse.overlaps(menuItems.members[curSelected], menuItems.cameras[0])))
+			if (controls.ACCEPT || (FlxG.mouse.justPressed && FlxG.mouse.overlaps(menuItems.members[curSelected], menuItems.cameras[0])))
 			{
 				if (optionShit[curSelected] == 'donate')
 				{
