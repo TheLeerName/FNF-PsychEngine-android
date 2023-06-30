@@ -8,6 +8,7 @@ import openfl.display.StageScaleMode;
 
 import lime.app.Application;
 
+import flixel.FlxG;
 import flixel.FlxGame;
 
 //crash handler stuff
