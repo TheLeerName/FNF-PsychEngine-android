@@ -178,22 +178,22 @@ class Controls extends FlxActionSet
 	public var UI_UP_P(get, never):Bool;
 
 	inline function get_UI_UP_P()
-		return _ui_upP.check();
+		return _ui_upP.check() || getSwipe(_ui_upP.name);
 
 	public var UI_LEFT_P(get, never):Bool;
 
 	inline function get_UI_LEFT_P()
-		return _ui_leftP.check();
+		return _ui_leftP.check() || getSwipe(_ui_leftP.name);
 
 	public var UI_RIGHT_P(get, never):Bool;
 
 	inline function get_UI_RIGHT_P()
-		return _ui_rightP.check();
+		return _ui_rightP.check() || getSwipe(_ui_rightP.name);
 
 	public var UI_DOWN_P(get, never):Bool;
 
 	inline function get_UI_DOWN_P()
-		return _ui_downP.check();
+		return _ui_downP.check() || getSwipe(_ui_downP.name);
 
 	public var UI_UP_R(get, never):Bool;
 
@@ -278,7 +278,7 @@ class Controls extends FlxActionSet
 	public var ACCEPT(get, never):Bool;
 
 	inline function get_ACCEPT()
-		return _accept.check();
+		return _accept.check() || getSwipe(_accept.name);
 
 	public var BACK(get, never):Bool;
 
@@ -294,6 +294,24 @@ class Controls extends FlxActionSet
 
 	inline function get_RESET()
 		return _reset.check();
+
+	public static var swipeSensitivity:Float = 0.1; // if 1, u need swipe entire screen lmao
+	public static var swipeDegreesOffset:Float = 25;
+	function getSwipe(name:String):Bool {
+		if (FlxG.swipes.length != 1) return false; // cuz game will crash without it
+		trace(FlxG.swipes[0].degrees);
+		switch (name) {
+			case Action.UI_DOWN_P:
+				return FlxG.swipes[0].degrees > 0 && (FlxG.swipes[0].distance >= FlxG.height * swipeSensitivity && Math.abs(FlxG.swipes[0].degrees) >= 90 - swipeDegreesOffset && Math.abs(FlxG.swipes[0].degrees) <= 90 + swipeDegreesOffset);
+			case Action.UI_UP_P:
+				return FlxG.swipes[0].degrees < 0 && (FlxG.swipes[0].distance >= FlxG.height * swipeSensitivity && Math.abs(FlxG.swipes[0].degrees) >= 90 - swipeDegreesOffset && Math.abs(FlxG.swipes[0].degrees) <= 90 + swipeDegreesOffset);
+			case Action.UI_LEFT_P:
+				return Math.abs(FlxG.swipes[0].degrees) > 90 && (FlxG.swipes[0].distance >= FlxG.width * swipeSensitivity && Math.abs(FlxG.swipes[0].degrees) >= 180 - swipeDegreesOffset && Math.abs(FlxG.swipes[0].degrees) <= 180 + swipeDegreesOffset);
+			case Action.UI_RIGHT_P:
+				return Math.abs(FlxG.swipes[0].degrees) < 90 && (FlxG.swipes[0].distance >= FlxG.width * swipeSensitivity && Math.abs(FlxG.swipes[0].degrees) >= -swipeDegreesOffset && Math.abs(FlxG.swipes[0].degrees) <= swipeDegreesOffset);
+		}
+		return false;
+	}
 
 	#if (haxe >= "4.0.0")
 	public function new(name, scheme = None)
