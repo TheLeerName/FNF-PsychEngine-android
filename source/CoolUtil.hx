@@ -137,7 +137,7 @@ class CoolUtil
 	public static function applicationAlert(description:String, title:String) {
 		Application.current.window.alert(description, title);
 		#if sys
-		Sys.println('$description:\n$title');
+		Sys.println('$title:\n$description');
 		#end
 	}
 
