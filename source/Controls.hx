@@ -311,8 +311,7 @@ class Controls extends FlxActionSet
 	/**
 	 * If you want disable it
 	 */
-	//public static var swipeEnabled:Bool = #if android true #else false #end;
-	public static var swipeEnabled:Bool = true;
+	public static var swipeEnabled:Bool = #if android true #else false #end;
 
 	var mousePos:FlxPoint = FlxPoint.get();
 	/**
