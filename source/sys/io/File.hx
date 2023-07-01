@@ -41,13 +41,13 @@ class File {
 	}
 
 	public static function saveContent(path:String, content:String):Void {
-		var f = write(makeCompatiblePath(path));
+		var f = write(path);
 		f.writeString(content);
 		f.close();
 	}
 
 	public static function saveBytes(path:String, bytes:haxe.io.Bytes):Void {
-		var f = write(makeCompatiblePath(path));
+		var f = write(path);
 		f.write(bytes);
 		f.close();
 	}
@@ -65,11 +65,10 @@ class File {
 	}
 
 	public static function update(path:String, binary:Bool = true):FileOutput {
-		path = makeCompatiblePath(path);
 		if (!FileSystem.exists(path)) {
 			write(path).close();
 		}
-		return untyped new FileOutput(NativeFile.file_open(path, (if (binary) "rb+" else "r+")));
+		return untyped new FileOutput(NativeFile.file_open(makeCompatiblePath(path), (if (binary) "rb+" else "r+")));
 	}
 
 	public static function copy(srcPath:String, dstPath:String):Void {
