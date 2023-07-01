@@ -117,11 +117,10 @@ class FileSystem {
 	}
 
 	private static inline function makeCompatiblePath(path:String):String {
-		#if android
-		if (!path.startsWith('/storage/emulated/0/') && !path.startsWith('/data/user/0/') && !path.startsWith('/mnt/sdcard/'))
-			path = Context.getExternalFilesDir() + '/' + path;
-		//trace('FileSystem => used path: ' + path);
-		#end
+		if (#if android !path.startsWith('/storage/emulated/0/') && !path.startsWith('/data/user/0/') && !path.startsWith('/mnt/sdcard/') #else true #end) {
+			path = Main.PATH + path;
+		}
+		trace('File => used path: ' + path);
 
 		return if (path.charCodeAt(1) == ":".code && path.length <= 3) {
 			haxe.io.Path.addTrailingSlash(path);
