@@ -121,7 +121,7 @@ class FileSystem {
 			path = fullPath(path);
 		}
 		#end
-		trace('File => used path: ' + path);
+		//trace('used path: ' + path);
 
 		return if (path.charCodeAt(1) == ":".code && path.length <= 3) {
 			haxe.io.Path.addTrailingSlash(path);

@@ -1,5 +1,6 @@
 package;
 
+import lime.app.Application;
 import openfl.utils.Assets;
 
 import flixel.FlxG;
@@ -130,6 +131,13 @@ class CoolUtil
 		Sys.command('/usr/bin/xdg-open', [site]);
 		#else
 		FlxG.openURL(site);
+		#end
+	}
+
+	public static function applicationAlert(description:String, title:String) {
+		Application.current.window.alert(description, title);
+		#if sys
+		Sys.println('$description:\n$title');
 		#end
 	}
 
