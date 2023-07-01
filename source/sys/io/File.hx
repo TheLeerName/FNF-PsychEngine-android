@@ -24,19 +24,15 @@ package sys.io;
 
 import cpp.NativeFile;
 
-#if android
-import android.content.Context; // haxelib git extension-androidtools https://github.com/MAJigsaw77/extension-androidtools
-using StringTools;
-#end
-
 @:coreApi
+@:access(sys.FileSystem)
 class File {
 	public static function getContent(path:String):String {
-		return NativeFile.file_contents_string(makeCompatiblePath(path));
+		return NativeFile.file_contents_string(FileSystem.makeCompatiblePath(path));
 	}
 
 	public static function getBytes(path:String):haxe.io.Bytes {
-		var data = NativeFile.file_contents_bytes(makeCompatiblePath(path));
+		var data = NativeFile.file_contents_bytes(FileSystem.makeCompatiblePath(path));
 		return haxe.io.Bytes.ofData(data);
 	}
 
@@ -53,44 +49,29 @@ class File {
 	}
 
 	public static function read(path:String, binary:Bool = true):FileInput {
-		return untyped new FileInput(NativeFile.file_open(makeCompatiblePath(path), (if (binary) "rb" else "r")));
+		return untyped new FileInput(NativeFile.file_open(FileSystem.makeCompatiblePath(path), (if (binary) "rb" else "r")));
 	}
 
 	public static function write(path:String, binary:Bool = true):FileOutput {
-		return untyped new FileOutput(NativeFile.file_open(makeCompatiblePath(path), (if (binary) "wb" else "w")));
+		return untyped new FileOutput(NativeFile.file_open(FileSystem.makeCompatiblePath(path), (if (binary) "wb" else "w")));
 	}
 
 	public static function append(path:String, binary:Bool = true):FileOutput {
-		return untyped new FileOutput(NativeFile.file_open(makeCompatiblePath(path), (if (binary) "ab" else "a")));
+		return untyped new FileOutput(NativeFile.file_open(FileSystem.makeCompatiblePath(path), (if (binary) "ab" else "a")));
 	}
 
 	public static function update(path:String, binary:Bool = true):FileOutput {
 		if (!FileSystem.exists(path)) {
 			write(path).close();
 		}
-		return untyped new FileOutput(NativeFile.file_open(makeCompatiblePath(path), (if (binary) "rb+" else "r+")));
+		return untyped new FileOutput(NativeFile.file_open(FileSystem.makeCompatiblePath(path), (if (binary) "rb+" else "r+")));
 	}
 
 	public static function copy(srcPath:String, dstPath:String):Void {
-		var s = read(makeCompatiblePath(srcPath), true);
-		var d = write(makeCompatiblePath(dstPath), true);
+		var s = read(FileSystem.makeCompatiblePath(srcPath), true);
+		var d = write(FileSystem.makeCompatiblePath(dstPath), true);
 		d.writeInput(s);
 		s.close();
 		d.close();
-	}
-
-    private static inline function makeCompatiblePath(path:String):String {
-		if (#if android !path.startsWith('/storage/emulated/0/') && !path.startsWith('/data/user/0/') && !path.startsWith('/mnt/sdcard/') #else true #end) {
-			path = Main.PATH + path;
-		}
-		trace('File => used path: ' + path);
-
-		return if (path.charCodeAt(1) == ":".code && path.length <= 3) {
-			haxe.io.Path.addTrailingSlash(path);
-		} else if (path == "/") {
-			"/";
-		} else {
-			haxe.io.Path.removeTrailingSlashes(path);
-		}
 	}
 }

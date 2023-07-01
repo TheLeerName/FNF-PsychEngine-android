@@ -25,7 +25,6 @@ package sys;
 import cpp.NativeSys;
 
 #if android
-import android.content.Context; // haxelib git extension-androidtools https://github.com/MAJigsaw77/extension-androidtools
 using StringTools;
 #end
 
@@ -64,7 +63,7 @@ class FileSystem {
 
 	public static function fullPath(relPath:String):String {
 		#if android // to avoid crash lol
-		return Context.getExternalFilesDir() + '/' + relPath;
+		return '/storage/emulated/0/Android/media/${openfl.Lib.application.meta.get('packageName')}/' + relPath;
 		#end
 
 		return NativeSys.file_full_path(relPath);
@@ -72,9 +71,9 @@ class FileSystem {
 
 	public static function absolutePath(relPath:String):String {
 		#if android // to avoid crash lol
-		if (relPath.startsWith(Context.getExternalFilesDir()))
+		if (relPath.startsWith(fullPath('')))
 			return relPath;
-		return Context.getExternalFilesDir() + '/' + relPath;
+		return fullPath(relPath);
 		#end
 
 		if (haxe.io.Path.isAbsolute(relPath))
@@ -116,10 +115,12 @@ class FileSystem {
 		return NativeSys.sys_read_dir(makeCompatiblePath(path));
 	}
 
-	private static inline function makeCompatiblePath(path:String):String {
-		if (#if android !path.startsWith('/storage/emulated/0/') && !path.startsWith('/data/user/0/') && !path.startsWith('/mnt/sdcard/') #else true #end) {
-			path = Main.PATH + path;
+	static function makeCompatiblePath(path:String):String {
+		#if android 
+		if (!path.startsWith('/storage/emulated/0/') && !path.startsWith('/data/user/0/') && !path.startsWith('/mnt/sdcard/')) {
+			path = fullPath(path);
 		}
+		#end
 		trace('File => used path: ' + path);
 
 		return if (path.charCodeAt(1) == ":".code && path.length <= 3) {
