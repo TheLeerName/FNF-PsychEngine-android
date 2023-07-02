@@ -1,11 +1,18 @@
 package flixel.addons.display;
 
-import flixel.system.FlxAssets.FlxShader;
 import lime.utils.Float32Array;
+import lime.graphics.WebGLRenderContext;
+
+import openfl.utils._internal.Log;
 import openfl.display.BitmapData;
 import openfl.display.ShaderInput;
 import openfl.display.ShaderParameter;
 import openfl.display.ShaderParameterType;
+import openfl.display3D._internal.GLShader;
+
+import flixel.system.FlxAssets.FlxShader;
+
+using StringTools;
 
 /**
  * An wrapper for Flixel/OpenFL's shaders, which takes fragment and vertex source
@@ -188,7 +195,18 @@ class FlxRuntimeShader extends FlxShader
 	static final PRAGMA_PRECISION:String = "#pragma precision";
 	static final PRAGMA_VERSION:String = "#pragma version";
 
-	private var _glslVersion:Int;
+	public var _glslVersion:Int = #if android 100 #else 120 #end;
+	/**
+	 * Fragment source without `#pragma header` replacement things
+	 */
+	public var fragmentSource:String;
+	/**
+	 * Vertex source without `#pragma header` replacement things
+	 */
+	public var vertexSource:String;
+	
+	var gl(get, never):WebGLRenderContext;
+	inline function get_gl():WebGLRenderContext { @:privateAccess return __context.gl; }
 
 	/**
 	 * Constructs a GLSL shader.
@@ -196,9 +214,11 @@ class FlxRuntimeShader extends FlxShader
 	 * @param vertexSource The vertex shader source.
 	 * Note you also need to `initialize()` the shader MANUALLY! It can't be done automatically.
 	 */
-	public function new(fragmentSource:String = null, vertexSource:String = null, glslVersion:Int = 120):Void
+	public function new(?fragmentSource:String, ?vertexSource:String, ?glslVersion:Int):Void
 	{
-		_glslVersion = glslVersion;
+		if (glslVersion != null) _glslVersion = glslVersion;
+		this.fragmentSource = fragmentSource;
+		this.vertexSource = vertexSource;
 
 		if (fragmentSource == null)
 		{
@@ -230,6 +250,68 @@ class FlxRuntimeShader extends FlxShader
 		}
 
 		super();
+	}
+
+	override function __createGLShader(source:String, type:Int):GLShader {
+		var shader = compileShader(source, type);
+
+		var shaderInfoLog = gl.getShaderInfoLog(shader);
+		var hasInfoLog = shaderInfoLog != null && StringTools.trim(shaderInfoLog) != "";
+		var compileStatus = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+
+		if (hasInfoLog || compileStatus == 0) {
+			if (compileStatus == 0) {
+				shader = doError(shader, shaderInfoLog, type);
+				//Log.error(message); die mf
+			}
+			else if (hasInfoLog) {
+				var message = (compileStatus == 0) ? "Error" : "Info";
+				message += (type == gl.VERTEX_SHADER) ? " compiling vertex shader" : " compiling fragment shader";
+				message += "\n" + shaderInfoLog;
+				message += "\n" + source;
+				Log.debug(message);
+			}
+		}
+
+		return shader;
+	}
+
+	function compileShader(source:String, type:Int) {
+		var shader = gl.createShader(type);
+		gl.shaderSource(shader, source);
+		gl.compileShader(shader);
+		return shader;
+	}
+
+	function doError(shader:GLShader, shaderInfoLog:String, type:Int):GLShader {
+		var message:String = '';
+		if (type == gl.FRAGMENT_SHADER)
+		{
+			var pragmaHeaderLength:Int = buildPrecisionHeaders().split('\n').length + BASE_FRAGMENT_HEADER.split('\n').length - 1;
+			if (!fragmentSource.contains('#pragma header')) pragmaHeaderLength = 0;
+			for (th in shaderInfoLog.split('\n')) if (th.contains('('))
+				message += th.substring(0, th.indexOf('(') + 1) + (Std.parseInt(th.substring(th.indexOf('(') + 1, th.indexOf(')'))) - pragmaHeaderLength) + th.substring(th.indexOf(')'), th.length) + '\n';
+
+			message += '\n';
+			message += fragmentSource != null ? fragmentSource : processFragmentSource(DEFAULT_FRAGMENT_SOURCE);
+			fragmentSource = null;
+			CoolUtil.applicationAlert(message, 'Error compiling fragment shader');
+			shader = compileShader(processFragmentSource(DEFAULT_FRAGMENT_SOURCE), type);
+		}
+		else
+		{
+			var pragmaHeaderLength:Int = buildPrecisionHeaders().split('\n').length + BASE_VERTEX_HEADER.split('\n').length - 1;
+			if (!vertexSource.contains('#pragma header')) pragmaHeaderLength = 0;
+			for (th in shaderInfoLog.split('\n')) if (th.contains('('))
+				message += th.substring(0, th.indexOf('(') + 1) + (Std.parseInt(th.substring(th.indexOf('(') + 1, th.indexOf(')'))) - pragmaHeaderLength) + th.substring(th.indexOf(')'), th.length) + '\n';
+
+			message += '\n';
+			message += vertexSource != null ? vertexSource : processVertexSource(DEFAULT_VERTEX_SOURCE);
+			vertexSource = null;
+			CoolUtil.applicationAlert(message, 'Error compiling vertex shader');
+			shader = compileShader(processVertexSource(DEFAULT_VERTEX_SOURCE), type);
+		}
+		return shader;
 	}
 	
 	/**
