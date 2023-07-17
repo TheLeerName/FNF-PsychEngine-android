@@ -14,34 +14,41 @@ class BaseMenuState<T:FlxObject> extends MusicBeatState {
 	/**
 	 * Current selected index on `menuItems`
 	 */
-	public var curSelected(default, set):Int = 0;
+	var curSelected(default, set):Int = 0;
 	/**
 	 * Group with items for menu
 	 */
-	public var menuItems:FlxTypedGroup<T> = new FlxTypedGroup<T>();
+	var menuItems:FlxTypedGroup<T> = new FlxTypedGroup<T>();
+	/**
+	 * For tapping on selected object by pointer. To enable/disable, change `acceptHitbox.visible`. Works only in mobile!
+	 */
+	var acceptHitbox:AttachedHitbox<T> = new AttachedHitbox<T>(null, 'accept');
+	/**
+	 * Set this to `false` if you want disable changing selection, `back` and `accept` calling
+	 */
+	var allowControls:Bool = true;
+	/**
+	 * If `SHIFT` pressed, selection changes by this value
+	 */
+	var shiftMult:Int = 1;
+	/**
+	 * Minimum hold time in seconds from where will be registered holding down or up keys
+	 */
+	var minHoldTime:Float = 0.5;
+
 	/**
 	 * Calls on changed `curSelected`. You don't need do `super.changeSelection(value);` cuz it empty
 	 * @param value Current selected index
 	 */
-	public function changeSelection(value:Int) {}
+	function changeSelection(value:Int) {}
 	/**
 	 * Calls on `controls.ACCEPT`. You don't need do `super.accept();` cuz it empty
 	 */
-	public function accept() {}
+	function accept() {}
 	/**
 	 * Calls on `controls.BACK`. You don't need do `super.back();` cuz it empty
 	 */
-	public function back() {}
-
-	/**
-	 * For tapping on selected object by pointer. To enable/disable, change `acceptHitbox.visible`. Works only in mobile!
-	 */
-	public var acceptHitbox:AttachedHitbox<T> = new AttachedHitbox<T>(null, 'accept');
-
-	/**
-	 * Set this to `false` if you want disable changing selection, `back` and `accept` calling
-	 */
-	public var allowControls:Bool = true;
+	function back() {}
 
 	/**
 	 * Make sure you adding objects above `super.create();`
@@ -63,14 +70,31 @@ class BaseMenuState<T:FlxObject> extends MusicBeatState {
 		Lib.application.window.onClose.add(destroy); // why it not calls on close app????????????????????????
 	}
 
+	var holdTime:Float = 0;
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
 		if (allowControls) {
 			if (controls.BACK) back();
 			if (controls.ACCEPT) accept();
-			if (controls.UI_UP_P) curSelected--;
-			if (controls.UI_DOWN_P) curSelected++;
+			if (controls.UI_UP_P) {
+				curSelected -= shiftMult;
+				holdTime = 0;
+			}
+			if (controls.UI_DOWN_P) {
+				curSelected += shiftMult;
+				holdTime = 0;
+			}
+
+			if(controls.UI_DOWN || controls.UI_UP)
+			{
+				var checkLastHold:Int = Math.floor((holdTime - minHoldTime) * 10);
+				holdTime += elapsed;
+				var checkNewHold:Int = Math.floor((holdTime - minHoldTime) * 10);
+
+				if(holdTime > minHoldTime && checkNewHold - checkLastHold > 0)
+					curSelected += (checkNewHold - checkLastHold) * (controls.UI_UP ? -shiftMult : shiftMult);
+			}
 		}
 	}
 
