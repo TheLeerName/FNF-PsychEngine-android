@@ -127,8 +127,6 @@
 	<haxelib name="hxcpp-debug-server"     version="1.2.4" if="debug" />
 	<haxelib name="hxcpp"                  version="4.2.1" />
 
-	<haxelib name="extension-androidtools" version="1.8.2" if="android"/>
-
 	<define name="hscriptPos" />
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
