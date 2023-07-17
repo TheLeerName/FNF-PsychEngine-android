@@ -1,13 +1,17 @@
 package input;
 
+import flixel.FlxObject;
+
 /**
  * Works like `Hitbox` class, but attached to `sprTracker`
  */
-class AttachedHitbox extends Hitbox {
-	public var sprTracker:FlxSprite;
+class AttachedHitbox<T:FlxObject> extends Hitbox {
+	public var sprTracker:T;
 
-	public function new(sprTracker:FlxSprite, controlName:String) {
-		super(sprTracker.x, sprTracker.y, sprTracker.width, sprTracker.height, 0, controlName);
+	public function new(sprTracker:T, controlName:String) {
+		super(0, 0, 0, 0, 0, controlName);
+
+		this.sprTracker = sprTracker;
 		alphaPressed = alphaReleased = alpha = 0;
 	}
 
@@ -15,6 +19,10 @@ class AttachedHitbox extends Hitbox {
 		if (sprTracker != null) {
 			setPosition(sprTracker.x, sprTracker.y);
 			setSize(sprTracker.width, sprTracker.height);
+		}
+		else {
+			setPosition(0, 0);
+			setSize(0, 0);
 		}
 
 		super.update(elapsed);
