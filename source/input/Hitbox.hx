@@ -1,9 +1,7 @@
 package input;
 
-import flixel.FlxSprite;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
-import flixel.input.FlxInput;
 import flixel.input.actions.FlxAction;
 import flixel.input.actions.FlxActionInputDigital;
 

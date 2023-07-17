@@ -1,7 +1,5 @@
 package input;
 
-import flixel.FlxSprite;
-
 /**
  * Works like `Hitbox` class, but attached to `sprTracker`
  */

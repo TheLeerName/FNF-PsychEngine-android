@@ -1,9 +1,6 @@
 package input;
 
-import flixel.FlxG;
 import flixel.math.FlxPoint;
-import flixel.input.FlxInput;
-import flixel.input.IFlxInput;
 
 /**
  * Swipes system like `IFlxInput` classes. Variable `visible` works like `enabled`

@@ -1,7 +1,5 @@
 package input;
 
-import flixel.FlxG;
-import flixel.input.IFlxInput;
 import flixel.input.keyboard.FlxKey;
 
 /**
