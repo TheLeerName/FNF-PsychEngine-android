@@ -82,9 +82,12 @@ class BaseMenuState<T:FlxObject> extends MusicBeatState {
 	}
 
 	function set_curSelected(v:Int):Int {
-		v = Math.floor(Math.min(Math.max(v, 0), menuItems.length - 1));
-		changeSelection(v);
-		if (menuItems.length > 0) acceptHitbox.sprTracker = menuItems.members[v];
-		return curSelected = v;
+		curSelected = v;
+		if (curSelected >= menuItems.length) curSelected = 0;
+		if (curSelected < 0) curSelected = menuItems.length - 1;
+
+		changeSelection(curSelected);
+		if (menuItems.length > 0) acceptHitbox.sprTracker = menuItems.members[curSelected];
+		return v;
 	}
 }
