@@ -37,7 +37,7 @@ class Swipe implements IFlxInput {
 	inline function get_justPressed():Bool return check(JUST_PRESSED);
 
 	var mousePos:FlxPoint = FlxPoint.get();
-	function check(trigger:FlxInputState) {
+	function check(trigger:FlxInputState):Bool {
 		if (!visible) return trigger == RELEASED;
 		switch(trigger) {
 			case JUST_RELEASED:
