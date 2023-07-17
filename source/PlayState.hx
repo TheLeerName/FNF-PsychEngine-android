@@ -1158,7 +1158,8 @@ class PlayState extends MusicBeatState
 
 		hitboxGroup = new FlxTypedSpriteGroup<Hitbox>();
 		hitboxGroup.cameras = [camOther];
-		add(hitboxGroup);
+		if (ClientPrefs.controllerMode && controls.mobileInput)
+			add(hitboxGroup);
 
 		var hitboxOptions:Array<Dynamic> = [
 			[0xffc24b99, 'note_left' ],
