@@ -1,7 +1,9 @@
 package;
 
 import openfl.Lib;
+
 import flixel.FlxG;
+import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.group.FlxGroup;
 
@@ -49,6 +51,24 @@ class BaseMenuState<T:FlxObject> extends MusicBeatState {
 	 * Calls on `controls.BACK`. You don't need do `super.back();` cuz it empty
 	 */
 	function back() {}
+
+	/**
+	 * Sets `obj` object to `pos` position
+	 * @param obj Object to reorder
+	 * @param pos New position of object
+	 */
+	function setObjectOrder(obj:FlxBasic, pos:Int) {
+		remove(obj, true);
+		insert(pos, obj);
+	}
+
+	/**
+	 * Returns position of `obj` object
+	 * @param obj Object to get position
+	 */
+	function getObjectOrder(obj:FlxBasic) {
+		return members.indexOf(obj);
+	}
 
 	/**
 	 * Make sure you adding objects above `super.create();`
