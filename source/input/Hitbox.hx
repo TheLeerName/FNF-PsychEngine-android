@@ -1,10 +1,9 @@
 package input;
 
-import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.input.FlxInput;
-import flixel.input.IFlxInput;
 import flixel.input.actions.FlxAction;
 import flixel.input.actions.FlxActionInputDigital;
 
@@ -13,12 +12,7 @@ using StringTools;
 /**
  * Creates hitbox with `IFlxInput` things. Variable `visible` works like `enabled`
  */
-class Hitbox extends FlxSprite implements IFlxInput {
-	public var justReleased(get, never):Bool;
-	public var released(get, never):Bool;
-	public var pressed(get, never):Bool;
-	public var justPressed(get, never):Bool;
-
+class Hitbox extends FlxTypedButton<FlxSprite> {
 	public var alphaPressed:Float = 0.4;
 	public var alphaReleased:Float = 0.2;
 
@@ -51,8 +45,14 @@ class Hitbox extends FlxSprite implements IFlxInput {
 	}
 
 	override function update(elapsed:Float) {
-		super.update(elapsed);
+		if (lastStatus == 1 && status == 1 && released && justReleased)
+			input.release(); // justReleased must be only in 1 frame!!!!
+
+		if (!visible) input.release();
+
 		alpha = pressed ? alphaPressed : alphaReleased;
+
+		super.update(elapsed);
 	}
 
 	function addInput(controlName:String, trigger:FlxInputState) {
@@ -70,29 +70,4 @@ class Hitbox extends FlxSprite implements IFlxInput {
 			field.remove(action, destroy);
 		}
 	}
-
-	function check(trigger:FlxInputState) {
-		if (visible && exists) {
-			#if mobile
-			for (touch in FlxG.touches.list)
-			#else
-			var touch = FlxG.mouse;
-			#end
-			if (getScreenBounds(null, cameras[0]).containsPoint(touch.getScreenPosition(cameras[0]))) {
-				switch(trigger) {
-					case JUST_RELEASED: return touch.justReleased;
-					case RELEASED: return touch.released;
-					case PRESSED: return touch.pressed;
-					case JUST_PRESSED: return touch.justPressed;
-				}
-			}
-		}
-
-		return trigger == RELEASED;
-	}
-
-	inline function get_justReleased():Bool return check(JUST_RELEASED);
-	inline function get_released():Bool return check(RELEASED);
-	inline function get_pressed():Bool return check(PRESSED);
-	inline function get_justPressed():Bool return check(JUST_PRESSED);
 }
