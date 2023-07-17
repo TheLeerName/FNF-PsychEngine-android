@@ -1,5 +1,6 @@
 package;
 
+import input.Hitbox;
 import haxe.Json;
 
 import openfl.Lib;
@@ -320,6 +321,7 @@ class PlayState extends MusicBeatState
 	// Less laggy controls
 	private var keysArray:Array<Dynamic>;
 	private var controlArray:Array<String>;
+	public var hitboxGroup:FlxTypedSpriteGroup<Hitbox>;
 
 	var precacheList:Map<String, String> = new Map<String, String>();
 	
@@ -1153,6 +1155,20 @@ class PlayState extends MusicBeatState
 		if(ClientPrefs.downScroll) {
 			botplayTxt.y = timeBarBG.y - 78;
 		}
+
+		hitboxGroup = new FlxTypedSpriteGroup<Hitbox>();
+		hitboxGroup.cameras = [camOther];
+		add(hitboxGroup);
+
+		var hitboxOptions:Array<Dynamic> = [
+			[0xffc24b99, 'note_left' ],
+			[0xff00ffff, 'note_down' ],
+			[0xff12fa05, 'note_up'   ],
+			[0xfff9393f, 'note_right']
+		];
+		var stepX:Float = FlxG.width / hitboxOptions.length;
+		for (i => opt in hitboxOptions)
+			hitboxGroup.add(new Hitbox(stepX * i, 0, stepX, FlxG.height, opt[0], opt[1]));
 
 		strumLineNotes.cameras = [camHUD];
 		grpNoteSplashes.cameras = [camHUD];
