@@ -39,6 +39,11 @@ class BaseMenuState<T:FlxObject> extends MusicBeatState {
 	public var acceptHitbox:AttachedHitbox<T> = new AttachedHitbox<T>(null, 'accept');
 
 	/**
+	 * Set this to `false` if you want disable changing selection, `back` and `accept` calling
+	 */
+	public var allowControls:Bool = true;
+
+	/**
 	 * Make sure you adding objects above `super.create();`
 	 */
 	override function create() {
@@ -61,10 +66,12 @@ class BaseMenuState<T:FlxObject> extends MusicBeatState {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (controls.BACK) back();
-		if (controls.ACCEPT) accept();
-		if (controls.UI_UP_P) curSelected--;
-		if (controls.UI_DOWN_P) curSelected++;
+		if (allowControls) {
+			if (controls.BACK) back();
+			if (controls.ACCEPT) accept();
+			if (controls.UI_UP_P) curSelected--;
+			if (controls.UI_DOWN_P) curSelected++;
+		}
 	}
 
 	override function destroy() {
