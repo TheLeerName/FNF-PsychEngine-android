@@ -4,6 +4,7 @@ import openfl.Lib;
 
 import flixel.FlxG;
 import flixel.FlxBasic;
+import flixel.FlxSprite;
 import flixel.FlxObject;
 import flixel.group.FlxGroup;
 
@@ -37,12 +38,20 @@ class BaseMenuSubstate<T:FlxObject> extends MusicBeatSubstate {
 	 * Minimum hold time in seconds from where will be registered holding down or up keys
 	 */
 	var minHoldTime:Float = 0.5;
+	/**
+	 * Time passed on state in seconds
+	 */
+	var timePassedOnState:Float = 0;
+	/**
+	 * Whether `new()` function ended
+	 */
+	var initialized:Bool = false;
 
 	/**
-	 * Calls on changed `curSelected`. You don't need do `super.changeSelection(value);` cuz it empty
-	 * @param value Current selected index
+	 * Calls on changed `curSelected`. You don't need do `super.changeSelection(change);` cuz it empty
+	 * @param change `curSelected` changed by this value
 	 */
-	function changeSelection(value:Int) {}
+	function changeSelection(change:Int) {}
 	/**
 	 * Calls on `controls.ACCEPT`. You don't need do `super.accept();` cuz it empty
 	 */
@@ -71,20 +80,15 @@ class BaseMenuSubstate<T:FlxObject> extends MusicBeatSubstate {
 	}
 
 	/**
-	 * Make sure you adding objects above `super();`
+	 * Make sure you adding objects above `super.create();`
 	 */
-	public function new() {
-		add(menuItems);
+	 override function create() {
+		insert(1, menuItems);
 
 		acceptHitbox.visible = controls.mobileInput;
 		add(acceptHitbox);
 
-		super();
-
-		if (FlxG.save.data.states_curSelected == null)
-			FlxG.save.data.states_curSelected = {};
-		var value:Null<Int> = Reflect.getProperty(FlxG.save.data.states_curSelected, Type.getClassName(Type.getClass(this)));
-		curSelected = value != null ? value : 0;
+		super.create();
 
 		Lib.application.window.onClose.add(destroy); // why it not calls on close app????????????????????????
 	}
@@ -92,6 +96,16 @@ class BaseMenuSubstate<T:FlxObject> extends MusicBeatSubstate {
 	var holdTime:Float = 0;
 	override function update(elapsed:Float) {
 		super.update(elapsed);
+
+		if (!initialized) {
+			if (FlxG.save.data.states_curSelected == null)
+				FlxG.save.data.states_curSelected = {};
+			var value:Null<Int> = Reflect.getProperty(FlxG.save.data.states_curSelected, Type.getClassName(Type.getClass(this)));
+
+			curSelected = value != null ? value : 0;
+			initialized = true;
+		}
+		timePassedOnState += elapsed;
 
 		if (allowControls) {
 			if (controls.BACK) back();
@@ -125,12 +139,13 @@ class BaseMenuSubstate<T:FlxObject> extends MusicBeatSubstate {
 	}
 
 	function set_curSelected(v:Int):Int {
-		curSelected = v;
-		if (curSelected >= menuItems.length) curSelected = 0;
-		if (curSelected < 0) curSelected = menuItems.length - 1;
+		if (v >= menuItems.length) v = 0;
+		if (v < 0) v = menuItems.length - 1;
 
-		changeSelection(curSelected);
-		if (menuItems.length > 0) acceptHitbox.sprTracker = menuItems.members[curSelected];
-		return v;
+		var change:Int = v - curSelected;
+		curSelected = v;
+		changeSelection(change);
+		if (menuItems.length > 0) acceptHitbox.sprTracker = menuItems.members[v];
+		return curSelected = v;
 	}
 }
