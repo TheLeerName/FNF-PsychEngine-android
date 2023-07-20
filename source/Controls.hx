@@ -143,17 +143,6 @@ class Controls extends FlxActionSet
 
 	public static var instance:Controls;
 
-	/**
-	 * Is mouse/touchpad just pressed and overlaps with `menuItemsSelected`?
-	 */
-	public var menuItemsSelected:FlxBasic;
-	/*function getAccept():Bool {
-		if (!swipeEnabled) return false;
-		var overlapsCheck:Bool = true;
-		if (menuItemsSelected != null && menuItemsSelected.exists) overlapsCheck = FlxG.mouse.overlaps(menuItemsSelected, menuItemsSelected.cameras[0]);
-		return FlxG.mouse.justPressed && overlapsCheck;
-	}*/
-
 	public var keybinds:Array<KeyBind> = [];
 	public var swipes:Array<Swipe> = [];
 

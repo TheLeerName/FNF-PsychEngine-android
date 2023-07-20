@@ -249,7 +249,6 @@ class CreditsState extends MusicBeatState
 			if (curSelected >= creditsStuff.length)
 				curSelected = 0;
 		} while(unselectableCheck(curSelected));
-		controls.menuItemsSelected = grpOptions.members[curSelected];
 
 		var newColor:Int =  getCurrentBGColor();
 		if(newColor != intendedColor) {

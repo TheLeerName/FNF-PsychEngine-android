@@ -8,13 +8,11 @@ import flixel.group.FlxGroup;
 
 using StringTools;
 
-class GameplayChangersSubstate extends MusicBeatSubstate
+class GameplayChangersSubstate extends BaseMenuSubstate<Alphabet>
 {
 	private var curOption:GameplayOption = null;
-	private var curSelected:Int = 0;
 	private var optionsArray:Array<Dynamic> = [];
 
-	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private var checkboxGroup:FlxTypedGroup<CheckboxThingie>;
 	private var grpTexts:FlxTypedGroup<AttachedText>;
 
@@ -96,10 +94,6 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		bg.alpha = 0.6;
 		add(bg);
 
-		// avoids lagspikes while scrolling through menus!
-		grpOptions = new FlxTypedGroup<Alphabet>();
-		add(grpOptions);
-
 		grpTexts = new FlxTypedGroup<AttachedText>();
 		add(grpTexts);
 
@@ -115,7 +109,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 			optionText.scaleX = 0.8;
 			optionText.scaleY = 0.8;
 			optionText.targetY = i;
-			grpOptions.add(optionText);
+			menuItems.add(optionText);
 
 			if(optionsArray[i].type == 'bool') {
 				optionText.x += 110;
@@ -139,24 +133,22 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 			updateTextFrom(optionsArray[i]);
 		}
 
-		changeSelection();
 		reloadCheckboxes();
 	}
 
+	override function accept() {
+		if (nextAccept <= 0 && curOption.type == 'bool') {
+			FlxG.sound.play(Paths.sound('scrollMenu'));
+			curOption.setValue((curOption.getValue() == true) ? false : true);
+			curOption.change();
+			reloadCheckboxes();
+		}
+	}
+
 	var nextAccept:Int = 5;
-	var holdTime:Float = 0;
 	var holdValue:Float = 0;
 	override function update(elapsed:Float)
 	{
-		if (controls.UI_UP_P)
-		{
-			changeSelection(-1);
-		}
-		if (controls.UI_DOWN_P)
-		{
-			changeSelection(1);
-		}
-
 		if (controls.BACK) {
 			close();
 			ClientPrefs.saveSettings();
@@ -165,22 +157,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 
 		if(nextAccept <= 0)
 		{
-			var usesCheckbox = true;
-			if(curOption.type != 'bool')
-			{
-				usesCheckbox = false;
-			}
-
-			if(usesCheckbox)
-			{
-				if(controls.ACCEPT)
-				{
-					FlxG.sound.play(Paths.sound('scrollMenu'));
-					curOption.setValue((curOption.getValue() == true) ? false : true);
-					curOption.change();
-					reloadCheckboxes();
-				}
-			} else {
+			if (curOption.type != 'bool') {
 				if(controls.UI_LEFT || controls.UI_RIGHT) {
 					var pressed = (controls.UI_LEFT_P || controls.UI_RIGHT_P);
 					if(holdTime > 0.5 || pressed) {
@@ -325,7 +302,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		holdTime = 0;
 	}
 	
-	function changeSelection(change:Int = 0)
+	override function changeSelection(change:Int)
 	{
 		curSelected += change;
 		if (curSelected < 0)
@@ -333,11 +310,9 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		if (curSelected >= optionsArray.length)
 			curSelected = 0;
 
-		controls.menuItemsSelected = grpOptions.members[curSelected];
-
 		var bullShit:Int = 0;
 
-		for (item in grpOptions.members) {
+		for (item in menuItems.members) {
 			item.targetY = bullShit - curSelected;
 			bullShit++;
 

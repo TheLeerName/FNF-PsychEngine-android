@@ -12,7 +12,7 @@ import flixel.addons.transition.FlxTransitionableState;
 
 using StringTools;
 
-class MasterEditorMenu extends MusicBeatState
+class MasterEditorMenu extends BaseMenuState<Alphabet>
 {
 	var options:Array<String> = [
 		'Week Editor',
@@ -22,10 +22,8 @@ class MasterEditorMenu extends MusicBeatState
 		'Character Editor',
 		'Chart Editor'
 	];
-	private var grpTexts:FlxTypedGroup<Alphabet>;
 	private var directories:Array<String> = [null];
 
-	private var curSelected = 0;
 	private var curDirectory = 0;
 	private var directoryTxt:FlxText;
 
@@ -42,15 +40,12 @@ class MasterEditorMenu extends MusicBeatState
 		bg.color = 0xFF353535;
 		add(bg);
 
-		grpTexts = new FlxTypedGroup<Alphabet>();
-		add(grpTexts);
-
 		for (i in 0...options.length)
 		{
 			var leText:Alphabet = new Alphabet(90, 320, options[i], true);
 			leText.isMenuItem = true;
 			leText.targetY = i;
-			grpTexts.add(leText);
+			menuItems.add(leText);
 			leText.snapToPosition();
 		}
 		
@@ -73,22 +68,38 @@ class MasterEditorMenu extends MusicBeatState
 		if(found > -1) curDirectory = found;
 		changeDirectory();
 		#end
-		changeSelection();
 
 		FlxG.mouse.visible = false;
 		super.create();
 	}
 
+	override function back() {
+		MusicBeatState.switchState(new MainMenuState());
+	}
+
+	override function accept() {
+		switch(options[curSelected]) {
+			case 'Character Editor':
+				LoadingState.loadAndSwitchState(new CharacterEditorState(Character.DEFAULT_CHARACTER, false));
+			case 'Week Editor':
+				MusicBeatState.switchState(new WeekEditorState());
+			case 'Menu Character Editor':
+				MusicBeatState.switchState(new MenuCharacterEditorState());
+			case 'Dialogue Portrait Editor':
+				LoadingState.loadAndSwitchState(new DialogueCharacterEditorState(), false);
+			case 'Dialogue Editor':
+				LoadingState.loadAndSwitchState(new DialogueEditorState(), false);
+			case 'Chart Editor'://felt it would be cool maybe
+				LoadingState.loadAndSwitchState(new ChartingState(), false);
+		}
+		FlxG.sound.music.volume = 0;
+		#if PRELOAD_ALL
+		FreeplayState.destroyFreeplayVocals();
+		#end
+	}
+
 	override function update(elapsed:Float)
 	{
-		if (controls.UI_UP_P)
-		{
-			changeSelection(-1);
-		}
-		if (controls.UI_DOWN_P)
-		{
-			changeSelection(1);
-		}
 		#if MODS_ALLOWED
 		if(controls.UI_LEFT_P)
 		{
@@ -100,35 +111,14 @@ class MasterEditorMenu extends MusicBeatState
 		}
 		#end
 
-		if (controls.BACK)
-		{
-			MusicBeatState.switchState(new MainMenuState());
-		}
+		super.update(elapsed);
+	}
 
-		if (controls.ACCEPT)
-		{
-			switch(options[curSelected]) {
-				case 'Character Editor':
-					LoadingState.loadAndSwitchState(new CharacterEditorState(Character.DEFAULT_CHARACTER, false));
-				case 'Week Editor':
-					MusicBeatState.switchState(new WeekEditorState());
-				case 'Menu Character Editor':
-					MusicBeatState.switchState(new MenuCharacterEditorState());
-				case 'Dialogue Portrait Editor':
-					LoadingState.loadAndSwitchState(new DialogueCharacterEditorState(), false);
-				case 'Dialogue Editor':
-					LoadingState.loadAndSwitchState(new DialogueEditorState(), false);
-				case 'Chart Editor'://felt it would be cool maybe
-					LoadingState.loadAndSwitchState(new ChartingState(), false);
-			}
-			FlxG.sound.music.volume = 0;
-			#if PRELOAD_ALL
-			FreeplayState.destroyFreeplayVocals();
-			#end
-		}
-		
+	override function changeSelection(change:Int) {
+		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+
 		var bullShit:Int = 0;
-		for (item in grpTexts.members)
+		for (item in menuItems.members)
 		{
 			item.targetY = bullShit - curSelected;
 			bullShit++;
@@ -142,21 +132,6 @@ class MasterEditorMenu extends MusicBeatState
 				// item.setGraphicSize(Std.int(item.width));
 			}
 		}
-		super.update(elapsed);
-	}
-
-	function changeSelection(change:Int = 0)
-	{
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
-
-		curSelected += change;
-
-		if (curSelected < 0)
-			curSelected = options.length - 1;
-		if (curSelected >= options.length)
-			curSelected = 0;
-
-		controls.menuItemsSelected = grpTexts.members[curSelected];
 	}
 
 	#if MODS_ALLOWED
