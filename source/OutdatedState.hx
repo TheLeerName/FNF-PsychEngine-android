@@ -34,7 +34,8 @@ class OutdatedState extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 		if(!leftState) {
-			if (controls.ACCEPT) {
+			var enter:Bool = FlxG.keys.justPressed.ENTER || controls.ACCEPT || FlxG.mouse.justPressed;
+			if (enter) {
 				leftState = true;
 				CoolUtil.browserLoad("https://github.com/ShadowMario/FNF-PsychEngine/releases");
 			}

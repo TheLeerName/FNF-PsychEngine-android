@@ -24,7 +24,7 @@ class FlashingState extends MusicBeatState
 		warnText = new FlxText(0, 0, FlxG.width,
 			"Hey, watch out!\n
 			This Mod contains some flashing lights!\n
-			Go to Options Menu and change it.\n
+			You can disable it in Options Menu if you want.\n
 			Press ACCEPT to proceed.\n
 			You've been warned!",
 			32);
@@ -37,7 +37,8 @@ class FlashingState extends MusicBeatState
 	{
 		if(!leftState) {
 			var back:Bool = controls.BACK;
-			if (controls.ACCEPT) {
+			var enter:Bool = FlxG.keys.justPressed.ENTER || controls.ACCEPT || FlxG.mouse.justPressed;
+			if (enter) {
 				leftState = true;
 				FlxTransitionableState.skipNextTransIn = true;
 				FlxTransitionableState.skipNextTransOut = true;
