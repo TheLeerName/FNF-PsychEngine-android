@@ -25,7 +25,7 @@ class BaseMenuSubstate<T:FlxObject> extends MusicBeatSubstate {
 	/**
 	 * For tapping on selected object by pointer. To enable/disable, change `acceptHitbox.visible`. Works only in mobile!
 	 */
-	var acceptHitbox:AttachedHitbox<T> = new AttachedHitbox<T>(null, 'accept');
+	var acceptHitbox:AttachedHitbox = new AttachedHitbox('accept');
 	/**
 	 * Set this to `false` if you want disable changing selection, `back` and `accept` calling
 	 */
@@ -82,7 +82,7 @@ class BaseMenuSubstate<T:FlxObject> extends MusicBeatSubstate {
 	/**
 	 * Make sure you adding objects above `super.create();`
 	 */
-	 override function create() {
+	override function create() {
 		insert(1, menuItems);
 
 		acceptHitbox.visible = controls.mobileInput;

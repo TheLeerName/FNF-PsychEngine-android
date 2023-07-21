@@ -25,7 +25,7 @@ class BaseMenuState<T:FlxObject> extends MusicBeatState {
 	/**
 	 * For tapping on selected object by pointer. To enable/disable, change `acceptHitbox.visible`. Works only in mobile!
 	 */
-	var acceptHitbox:AttachedHitbox<T> = new AttachedHitbox<T>(null, 'accept');
+	var acceptHitbox:AttachedHitbox = new AttachedHitbox('accept');
 	/**
 	 * Set this to `false` if you want disable changing selection, `back` and `accept` calling
 	 */
