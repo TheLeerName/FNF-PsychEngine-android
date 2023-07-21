@@ -86,10 +86,8 @@ class GameplayChangersSubstate extends BaseMenuSubstate<Alphabet>
 		return null;
 	}
 
-	public function new()
+	override function create()
 	{
-		super();
-		
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		bg.alpha = 0.6;
 		add(bg);
@@ -134,6 +132,7 @@ class GameplayChangersSubstate extends BaseMenuSubstate<Alphabet>
 		}
 
 		reloadCheckboxes();
+		super.create();
 	}
 
 	override function accept() {
@@ -145,16 +144,16 @@ class GameplayChangersSubstate extends BaseMenuSubstate<Alphabet>
 		}
 	}
 
+	override function back() {
+		close();
+		ClientPrefs.saveSettings();
+		FlxG.sound.play(Paths.sound('cancelMenu'));
+	}
+
 	var nextAccept:Int = 5;
 	var holdValue:Float = 0;
 	override function update(elapsed:Float)
 	{
-		if (controls.BACK) {
-			close();
-			ClientPrefs.saveSettings();
-			FlxG.sound.play(Paths.sound('cancelMenu'));
-		}
-
 		if(nextAccept <= 0)
 		{
 			if (curOption.type != 'bool') {
@@ -304,12 +303,6 @@ class GameplayChangersSubstate extends BaseMenuSubstate<Alphabet>
 	
 	override function changeSelection(change:Int)
 	{
-		curSelected += change;
-		if (curSelected < 0)
-			curSelected = optionsArray.length - 1;
-		if (curSelected >= optionsArray.length)
-			curSelected = 0;
-
 		var bullShit:Int = 0;
 
 		for (item in menuItems.members) {
