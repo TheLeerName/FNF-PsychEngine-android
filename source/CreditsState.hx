@@ -21,11 +21,8 @@ import sys.io.File;
 
 using StringTools;
 
-class CreditsState extends MusicBeatState
+class CreditsState extends BaseMenuState<Alphabet>
 {
-	var curSelected:Int = -1;
-
-	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private var iconArray:Array<AttachedSprite> = [];
 	private var creditsStuff:Array<Array<String>> = [];
 
@@ -48,9 +45,6 @@ class CreditsState extends MusicBeatState
 		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		add(bg);
 		bg.screenCenter();
-		
-		grpOptions = new FlxTypedGroup<Alphabet>();
-		add(grpOptions);
 
 		#if MODS_ALLOWED
 		var path:String = 'modsList.txt';
@@ -118,7 +112,7 @@ class CreditsState extends MusicBeatState
 			optionText.targetY = i;
 			optionText.changeX = false;
 			optionText.snapToPosition();
-			grpOptions.add(optionText);
+			menuItems.add(optionText);
 
 			if(isSelectable) {
 				if(creditsStuff[i][5] != null)
@@ -157,68 +151,32 @@ class CreditsState extends MusicBeatState
 
 		bg.color = getCurrentBGColor();
 		intendedColor = bg.color;
-		changeSelection();
 		super.create();
 	}
 
-	var quitting:Bool = false;
-	var holdTime:Float = 0;
+	override function accept() {
+		if(creditsStuff[curSelected][3] == null || creditsStuff[curSelected][3].length > 4) {
+			CoolUtil.browserLoad(creditsStuff[curSelected][3]);
+		}
+	}
+
+	override function back() {
+		if(colorTween != null) {
+			colorTween.cancel();
+		}
+		FlxG.sound.play(Paths.sound('cancelMenu'));
+		MusicBeatState.switchState(new MainMenuState());
+		allowControls = false;
+	}
+
 	override function update(elapsed:Float)
 	{
 		if (FlxG.sound.music.volume < 0.7)
 		{
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 		}
-
-		if(!quitting)
-		{
-			if(creditsStuff.length > 1)
-			{
-				var shiftMult:Int = 1;
-				if(FlxG.keys.pressed.SHIFT) shiftMult = 3;
-
-				var upP = controls.UI_UP_P;
-				var downP = controls.UI_DOWN_P;
-
-				if (upP)
-				{
-					changeSelection(-shiftMult);
-					holdTime = 0;
-				}
-				if (downP)
-				{
-					changeSelection(shiftMult);
-					holdTime = 0;
-				}
-
-				if(controls.UI_DOWN || controls.UI_UP)
-				{
-					var checkLastHold:Int = Math.floor((holdTime - 0.5) * 10);
-					holdTime += elapsed;
-					var checkNewHold:Int = Math.floor((holdTime - 0.5) * 10);
-
-					if(holdTime > 0.5 && checkNewHold - checkLastHold > 0)
-					{
-						changeSelection((checkNewHold - checkLastHold) * (controls.UI_UP ? -shiftMult : shiftMult));
-					}
-				}
-			}
-
-			if(controls.ACCEPT && (creditsStuff[curSelected][3] == null || creditsStuff[curSelected][3].length > 4)) {
-				CoolUtil.browserLoad(creditsStuff[curSelected][3]);
-			}
-			if (controls.BACK)
-			{
-				if(colorTween != null) {
-					colorTween.cancel();
-				}
-				FlxG.sound.play(Paths.sound('cancelMenu'));
-				MusicBeatState.switchState(new MainMenuState());
-				quitting = true;
-			}
-		}
 		
-		for (item in grpOptions.members)
+		for (item in menuItems.members)
 		{
 			if(!item.bold)
 			{
@@ -238,17 +196,23 @@ class CreditsState extends MusicBeatState
 		super.update(elapsed);
 	}
 
-	var moveTween:FlxTween = null;
-	function changeSelection(change:Int = 0)
-	{
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+	override function set_curSelected(v:Int):Int {
+		var change:Int = v - curSelected;
 		do {
 			curSelected += change;
-			if (curSelected < 0)
-				curSelected = creditsStuff.length - 1;
-			if (curSelected >= creditsStuff.length)
-				curSelected = 0;
+			if (curSelected < 0) curSelected = menuItems.length - 1;
+			if (curSelected >= menuItems.length) curSelected = 0;
 		} while(unselectableCheck(curSelected));
+
+		changeSelection(change);
+		if (menuItems.length > 0) acceptHitbox.sprTracker = menuItems.members[curSelected];
+		return curSelected;
+	}
+
+	var moveTween:FlxTween = null;
+	override function changeSelection(change:Int)
+	{
+		if (change != 0) FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 
 		var newColor:Int =  getCurrentBGColor();
 		if(newColor != intendedColor) {
@@ -265,7 +229,7 @@ class CreditsState extends MusicBeatState
 
 		var bullShit:Int = 0;
 
-		for (item in grpOptions.members)
+		for (item in menuItems.members)
 		{
 			item.targetY = bullShit - curSelected;
 			bullShit++;
