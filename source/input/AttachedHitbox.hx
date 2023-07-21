@@ -4,7 +4,7 @@ import flixel.FlxObject;
 import flixel.util.FlxColor;
 
 /**
- * Works like `Hitbox` class, but attached to `sprTracker`
+ * Works like `Hitbox` class, but attached to `sprTracker`. Hitbox itself is invisible, but you can change `alphaPressed`/`alphaReleased` for it
  */
 class AttachedHitbox extends Hitbox {
 	public var sprTracker:FlxObject;
@@ -25,10 +25,12 @@ class AttachedHitbox extends Hitbox {
 			if (alpha != 0) updateHitbox();
 			scrollFactor.set(sprTracker.scrollFactor.x, sprTracker.scrollFactor.y);
 		}
-		//else {
-		//	setPosition(0, 0);
-		//	setSize(0, 0);
-		//}
+		else {
+			setPosition(0, 0);
+			scale.set(1, 1);
+			if (alpha != 0) updateHitbox();
+			scrollFactor.set(0, 0);
+		}
 
 		super.update(elapsed);
 	}
