@@ -88,26 +88,15 @@ class OptionsState extends BaseMenuState<Alphabet>
 		ClientPrefs.saveSettings();
 	}
 
-	override function update(elapsed:Float) {
-		super.update(elapsed);
-
-		if (controls.UI_UP_P) {
-			changeSelection(-1);
-		}
-		if (controls.UI_DOWN_P) {
-			changeSelection(1);
-		}
-
-		if (controls.BACK) {
-			FlxG.sound.play(Paths.sound('cancelMenu'));
-			MusicBeatState.switchState(new MainMenuState());
-		}
-
-		if (controls.ACCEPT) {
-			openSelectedSubstate(options[curSelected]);
-		}
+	override function back() {
+		FlxG.sound.play(Paths.sound('cancelMenu'));
+		MusicBeatState.switchState(new MainMenuState());
 	}
-	
+
+	override function accept() {
+		openSelectedSubstate(options[curSelected]);
+	}
+
 	override function changeSelection(change:Int) {
 		if (change != 0) FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 
