@@ -44,9 +44,6 @@ class StoryMenuState extends BaseMenuState<MenuItem>
 
 	override function create()
 	{
-		Paths.clearStoredMemory();
-		Paths.clearUnusedMemory();
-
 		PlayState.isStoryMode = true;
 		WeekData.reloadWeekFiles(true);
 		if(curSelected >= WeekData.weeksList.length) curSelected = 0;
@@ -182,9 +179,8 @@ class StoryMenuState extends BaseMenuState<MenuItem>
 		super.closeSubState();
 	}
 
-	override function accept()
-	{
-		if (!weekIsLocked(loadedWeeks[curSelected].fileName))
+	override function accept() {
+		if (!movedBack && !selectedWeek && !weekIsLocked(loadedWeeks[curSelected].fileName))
 		{
 			if (stopspamming == false)
 			{
@@ -233,9 +229,12 @@ class StoryMenuState extends BaseMenuState<MenuItem>
 	}
 
 	override function back() {
-		FlxG.sound.play(Paths.sound('cancelMenu'));
-		movedBack = true;
-		MusicBeatState.switchState(new MainMenuState());
+		if (!movedBack && !selectedWeek)
+		{
+			FlxG.sound.play(Paths.sound('cancelMenu'));
+			movedBack = true;
+			MusicBeatState.switchState(new MainMenuState());
+		}
 	}
 
 	override function update(elapsed:Float)
@@ -248,9 +247,7 @@ class StoryMenuState extends BaseMenuState<MenuItem>
 
 		// FlxG.watch.addQuick('font', scoreText.font);
 
-		allowControls = !movedBack && !selectedWeek;
-
-		if (allowControls)
+		if (!movedBack && !selectedWeek)
 		{
 			if(FlxG.mouse.wheel != 0)
 			{
