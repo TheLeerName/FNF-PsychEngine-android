@@ -1,5 +1,6 @@
 package;
 
+import input.AlphabetHitbox;
 import openfl.text.TextField;
 import openfl.utils.Assets as OpenFlAssets;
 
@@ -49,6 +50,10 @@ class FreeplayState extends BaseMenuState<Alphabet>
 	var bg:FlxSprite;
 	var intendedColor:Int;
 	var colorTween:FlxTween;
+
+	var spaceHitbox:AlphabetHitbox;
+	var ctrlHitbox:AlphabetHitbox;
+	var resetHitbox:AlphabetHitbox;
 
 	override function create()
 	{
@@ -189,11 +194,30 @@ class FreeplayState extends BaseMenuState<Alphabet>
 		var leText:String = "Press CTRL to open the Gameplay Changers Menu / Press RESET to Reset your Score and Accuracy.";
 		var size:Int = 18;
 		#end
+
 		var text:FlxText = new FlxText(textBG.x, textBG.y + 4, FlxG.width, leText, size);
 		text.setFormat(Paths.font("vcr.ttf"), size, FlxColor.WHITE, RIGHT);
 		text.scrollFactor.set();
 		add(text);
+		if (controls.mobileInput) {
+			textBG.visible = text.visible = false;
+		}
 		super.create();
+
+		spaceHitbox = new AlphabetHitbox(0, scoreBG.y + scoreBG.height, 20, 0.58, 'Listen to the Song');
+		spaceHitbox.visible = controls.mobileInput;
+		add(spaceHitbox);
+		spaceHitbox.x = FlxG.width - spaceHitbox.width;
+
+		ctrlHitbox = new AlphabetHitbox(0, spaceHitbox.y + spaceHitbox.height, 20, 0.431, 'Gameplay Changers Menu');
+		spaceHitbox.visible = controls.mobileInput;
+		add(ctrlHitbox);
+		ctrlHitbox.x = FlxG.width - ctrlHitbox.width;
+
+		resetHitbox = new AlphabetHitbox(0, ctrlHitbox.y + ctrlHitbox.height, 20, 0.3325, 'Reset your Score and Accuracy', 'reset');
+		spaceHitbox.visible = controls.mobileInput;
+		add(resetHitbox);
+		resetHitbox.x = FlxG.width - resetHitbox.width;
 	}
 
 	override function closeSubState() {
@@ -301,8 +325,8 @@ class FreeplayState extends BaseMenuState<Alphabet>
 		scoreText.text = 'PERSONAL BEST: ' + lerpScore + ' (' + ratingSplit.join('.') + '%)';
 		positionHighscore();
 
-		var space = FlxG.keys.justPressed.SPACE;
-		var ctrl = FlxG.keys.justPressed.CONTROL;
+		var space = FlxG.keys.justPressed.SPACE || spaceHitbox.hitbox.justPressed;
+		var ctrl = FlxG.keys.justPressed.CONTROL || ctrlHitbox.hitbox.justPressed;
 
 		shiftMult = FlxG.keys.pressed.SHIFT ? 3 : 1;
 
