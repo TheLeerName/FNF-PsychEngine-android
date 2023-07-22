@@ -152,6 +152,7 @@ class CreditsState extends BaseMenuState<Alphabet>
 		bg.color = getCurrentBGColor();
 		intendedColor = bg.color;
 		super.create();
+		acceptHitbox.addOffset(0, 55);
 	}
 
 	override function accept() {

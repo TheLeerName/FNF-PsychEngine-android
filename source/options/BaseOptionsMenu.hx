@@ -100,6 +100,7 @@ class BaseOptionsMenu extends BaseMenuSubstate<Alphabet>
 		}
 
 		reloadCheckboxes();
+		acceptHitbox.addOffset(0, 55);
 	}
 
 	public function addOption(option:Option) {

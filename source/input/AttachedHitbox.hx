@@ -8,6 +8,17 @@ import flixel.util.FlxColor;
  */
 class AttachedHitbox extends Hitbox {
 	public var sprTracker:FlxObject;
+	public var offsetX:Float = 0;
+	public var offsetY:Float = 0;
+
+	public function setOffset(x:Float, y:Float) {
+		offsetX = x;
+		offsetY = y;
+	}
+	public function addOffset(x:Float, y:Float) {
+		offsetX += x;
+		offsetY += y;
+	}
 
 	public function new(controlName:String, ?color:FlxColor = 0xffff0000, ?sprTracker:FlxObject) {
 		super(0, 0, 1, 1, 0xffffffff, controlName);
@@ -20,7 +31,7 @@ class AttachedHitbox extends Hitbox {
 
 	override function update(elapsed:Float) {
 		if (sprTracker != null && visible) {
-			setPosition(sprTracker.x, sprTracker.y);
+			setPosition(sprTracker.x + offsetX, sprTracker.y + offsetY);
 			scale.set(sprTracker.width, sprTracker.height);
 			if (alpha != 0) updateHitbox();
 			scrollFactor.set(sprTracker.scrollFactor.x, sprTracker.scrollFactor.y);

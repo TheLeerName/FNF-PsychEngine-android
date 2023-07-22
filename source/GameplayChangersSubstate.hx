@@ -134,6 +134,7 @@ class GameplayChangersSubstate extends BaseMenuSubstate<Alphabet>
 		}
 
 		reloadCheckboxes();
+		acceptHitbox.addOffset(-40, -73);
 	}
 
 	override function accept() {
