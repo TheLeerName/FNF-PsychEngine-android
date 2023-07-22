@@ -20,7 +20,7 @@ class AttachedHitbox extends Hitbox {
 		offsetY += y;
 	}
 
-	public function new(controlName:String, ?color:FlxColor = 0xffff0000, ?sprTracker:FlxObject) {
+	public function new(?controlName:String, ?color:FlxColor = 0xffff0000, ?sprTracker:FlxObject) {
 		super(0, 0, 1, 1, 0xffffffff, controlName);
 		this.color = color;
 

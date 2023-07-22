@@ -16,10 +16,14 @@ class Hitbox extends FlxTypedButton<FlxSprite> {
 
 	public var name:String;
 
-	public function new(x:Float, y:Float, width:Float, height:Float, color:FlxColor, controlName:String) {
+	/**
+	 * Set `controlName` to `null` to avoid adding hitbox to `Controls.instance` (if you want do extra controls)
+	 */
+	public function new(x:Float, y:Float, width:Float, height:Float, color:FlxColor, ?controlName:String) {
 		super(x, y);
 		makeGraphic(Math.floor(width), Math.floor(height), color);
 
+		if (controlName == null) return;
 		name = controlName;
 		if (controlName.startsWith('note_') || controlName.startsWith('ui_')) {
 			addInput('_' + controlName,       PRESSED);

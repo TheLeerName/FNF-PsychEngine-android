@@ -17,7 +17,7 @@ class AlphabetHitbox extends FlxSpriteGroup {
 		return visible;
 	}
 
-	public function new(x:Float, y:Float, offset:Float = 20, labelScale:Float = 1, text:String, controlName:String) {
+	public function new(x:Float, y:Float, offset:Float = 20, labelScale:Float = 1, text:String, ?controlName:String) {
 		super(x, y);
 
 		hitbox = new Hitbox(0, 0, 1, 1, 0xffffffff, controlName);
