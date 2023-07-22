@@ -57,6 +57,7 @@ class AchievementsMenuState extends BaseMenuState<Alphabet>
 		descText.borderSize = 2.4;
 		add(descText);
 
+		useAcceptHitbox = false;
 		super.create();
 	}
 
