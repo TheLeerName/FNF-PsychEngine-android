@@ -19,6 +19,8 @@ import flixel.addons.transition.FlxTransitionableState;
 
 import editors.MasterEditorMenu;
 
+import input.AlphabetHitbox;
+
 import Achievements;
 
 using StringTools;
@@ -43,7 +45,7 @@ class MainMenuState extends BaseMenuState<FlxSprite>
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 	var camFollowPos:FlxObject;
-	var debugKeys:Array<FlxKey>;
+	var debug1Hitbox:AlphabetHitbox;
 
 	override function create()
 	{
@@ -56,7 +58,6 @@ class MainMenuState extends BaseMenuState<FlxSprite>
 		// Updating Discord Rich Presence
 		Discord.changePresence("In the Menus", null);
 		#end
-		debugKeys = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_1'));
 
 		camGame = new FlxCamera();
 		camAchievement = new FlxCamera();
@@ -150,6 +151,12 @@ class MainMenuState extends BaseMenuState<FlxSprite>
 		#end
 
 		super.create();
+
+		debug1Hitbox = new AlphabetHitbox(0, 0, 20, 0.34, 'master editor\n      menu', 'debug_1');
+		debug1Hitbox.visible = controls.mobileInput;
+		debug1Hitbox.scrollFactor.set();
+		add(debug1Hitbox);
+		debug1Hitbox.x = FlxG.width - debug1Hitbox.width;
 	}
 
 	#if ACHIEVEMENTS_ALLOWED
@@ -231,13 +238,11 @@ class MainMenuState extends BaseMenuState<FlxSprite>
 		var lerpVal:Float = CoolUtil.boundTo(elapsed * 7.5, 0, 1);
 		camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, lerpVal), FlxMath.lerp(camFollowPos.y, camFollow.y, lerpVal));
 
-		#if desktop
-		if (FlxG.keys.anyJustPressed(debugKeys) && allowControls)
+		if (controls.DEBUG_1 && allowControls)
 		{
 			allowControls = false;
 			MusicBeatState.switchState(new MasterEditorMenu());
 		}
-		#end
 
 		super.update(elapsed);
 
