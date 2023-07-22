@@ -86,8 +86,10 @@ class GameplayChangersSubstate extends BaseMenuSubstate<Alphabet>
 		return null;
 	}
 
-	override function create()
+	public function new()
 	{
+		super();
+
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		bg.alpha = 0.6;
 		add(bg);
@@ -132,7 +134,6 @@ class GameplayChangersSubstate extends BaseMenuSubstate<Alphabet>
 		}
 
 		reloadCheckboxes();
-		super.create();
 	}
 
 	override function accept() {

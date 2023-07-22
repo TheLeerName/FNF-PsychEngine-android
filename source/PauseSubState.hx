@@ -26,7 +26,9 @@ class PauseSubState extends BaseMenuSubstate<Alphabet>
 
 	public static var songName:String = '';
 
-	override function create() {
+	public function new(?x:Float, ?y:Float) {
+		super();
+
 		if(CoolUtil.difficulties.length < 2) optionsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
 
 		if(PlayState.chartingMode)
@@ -120,7 +122,6 @@ class PauseSubState extends BaseMenuSubstate<Alphabet>
 		FlxTween.tween(blueballedTxt, {alpha: 1, y: blueballedTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
 
 		regenMenu();
-		super.create();
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 	}
 

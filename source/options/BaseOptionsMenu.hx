@@ -24,8 +24,10 @@ class BaseOptionsMenu extends BaseMenuSubstate<Alphabet>
 	public var title:String;
 	public var rpcTitle:String;
 
-	override function create()
+	public function new()
 	{
+		super();
+
 		if(title == null) title = 'Options';
 		if(rpcTitle == null) rpcTitle = 'Options Menu';
 		
@@ -98,7 +100,6 @@ class BaseOptionsMenu extends BaseMenuSubstate<Alphabet>
 		}
 
 		reloadCheckboxes();
-		super.create();
 	}
 
 	public function addOption(option:Option) {
