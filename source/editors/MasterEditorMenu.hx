@@ -45,7 +45,7 @@ class MasterEditorMenu extends BaseMenuState<Alphabet>
 			var leText:Alphabet = new Alphabet(90, 320, options[i], true);
 			leText.isMenuItem = true;
 			leText.targetY = i;
-			menuItems.add(leText);
+			grpMenuItems.add(leText);
 			leText.snapToPosition();
 		}
 		
@@ -118,7 +118,7 @@ class MasterEditorMenu extends BaseMenuState<Alphabet>
 		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 
 		var bullShit:Int = 0;
-		for (item in menuItems.members)
+		for (item in grpMenuItems.members)
 		{
 			item.targetY = bullShit - curSelected;
 			bullShit++;

@@ -111,7 +111,7 @@ class FreeplayState extends BaseMenuState<Alphabet>
 			var songText:Alphabet = new Alphabet(90, 320, songs[i].songName, true);
 			songText.isMenuItem = true;
 			songText.targetY = i - curSelected;
-			menuItems.add(songText);
+			grpMenuItems.add(songText);
 
 			var maxWidth = 980;
 			if (songText.width > maxWidth)
@@ -415,7 +415,7 @@ class FreeplayState extends BaseMenuState<Alphabet>
 
 		iconArray[curSelected].alpha = 1;
 
-		for (item in menuItems.members)
+		for (item in grpMenuItems.members)
 		{
 			item.targetY = bullShit - curSelected;
 			bullShit++;

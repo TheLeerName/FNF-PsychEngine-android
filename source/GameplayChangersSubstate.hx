@@ -109,7 +109,7 @@ class GameplayChangersSubstate extends BaseMenuSubstate<Alphabet>
 			optionText.scaleX = 0.8;
 			optionText.scaleY = 0.8;
 			optionText.targetY = i;
-			menuItems.add(optionText);
+			grpMenuItems.add(optionText);
 
 			if(optionsArray[i].type == 'bool') {
 				optionText.x += 110;
@@ -307,7 +307,7 @@ class GameplayChangersSubstate extends BaseMenuSubstate<Alphabet>
 		if (change != 0) FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 		var bullShit:Int = 0;
 
-		for (item in menuItems.members) {
+		for (item in grpMenuItems.members) {
 			item.targetY = bullShit - curSelected;
 			bullShit++;
 

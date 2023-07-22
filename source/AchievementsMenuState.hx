@@ -43,7 +43,7 @@ class AchievementsMenuState extends BaseMenuState<Alphabet>
 			optionText.isMenuItem = true;
 			optionText.targetY = i - curSelected;
 			optionText.snapToPosition();
-			menuItems.add(optionText);
+			grpMenuItems.add(optionText);
 
 			var icon:AttachedAchievement = new AttachedAchievement(optionText.x - 105, optionText.y, achieveName);
 			icon.sprTracker = optionText;
@@ -70,7 +70,7 @@ class AchievementsMenuState extends BaseMenuState<Alphabet>
 		if (change != 0) FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 		var bullShit:Int = 0;
 
-		for (item in menuItems.members) {
+		for (item in grpMenuItems.members) {
 			item.targetY = bullShit - curSelected;
 			bullShit++;
 

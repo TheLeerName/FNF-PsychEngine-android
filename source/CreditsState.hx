@@ -112,7 +112,7 @@ class CreditsState extends BaseMenuState<Alphabet>
 			optionText.targetY = i;
 			optionText.changeX = false;
 			optionText.snapToPosition();
-			menuItems.add(optionText);
+			grpMenuItems.add(optionText);
 
 			if(isSelectable) {
 				if(creditsStuff[i][5] != null)
@@ -177,7 +177,7 @@ class CreditsState extends BaseMenuState<Alphabet>
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 		}
 		
-		for (item in menuItems.members)
+		for (item in grpMenuItems.members)
 		{
 			if(!item.bold)
 			{
@@ -201,12 +201,12 @@ class CreditsState extends BaseMenuState<Alphabet>
 		var change:Int = v - curSelected;
 		do {
 			curSelected += change;
-			if (curSelected < 0) curSelected = menuItems.length - 1;
-			if (curSelected >= menuItems.length) curSelected = 0;
+			if (curSelected < 0) curSelected = grpMenuItems.length - 1;
+			if (curSelected >= grpMenuItems.length) curSelected = 0;
 		} while(unselectableCheck(curSelected));
 
 		changeSelection(change);
-		if (menuItems.length > 0) acceptHitbox.sprTracker = menuItems.members[curSelected];
+		if (grpMenuItems.length > 0) acceptHitbox.sprTracker = grpMenuItems.members[curSelected];
 		return curSelected;
 	}
 
@@ -230,7 +230,7 @@ class CreditsState extends BaseMenuState<Alphabet>
 
 		var bullShit:Int = 0;
 
-		for (item in menuItems.members)
+		for (item in grpMenuItems.members)
 		{
 			item.targetY = bullShit - curSelected;
 			bullShit++;

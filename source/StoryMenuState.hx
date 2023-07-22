@@ -92,7 +92,7 @@ class StoryMenuState extends BaseMenuState<MenuItem>
 				var weekThing:MenuItem = new MenuItem(0, bgSprite.y + 396, WeekData.weeksList[i]);
 				weekThing.y += ((weekThing.height + 20) * num);
 				weekThing.targetY = num;
-				menuItems.add(weekThing);
+				grpMenuItems.add(weekThing);
 
 				weekThing.screenCenter(X);
 				weekThing.antialiasing = ClientPrefs.globalAntialiasing;
@@ -125,7 +125,7 @@ class StoryMenuState extends BaseMenuState<MenuItem>
 		difficultySelectors = new FlxGroup();
 		add(difficultySelectors);
 
-		leftArrow = new FlxSprite(menuItems.members[0].x + menuItems.members[0].width + 10, menuItems.members[0].y + 10);
+		leftArrow = new FlxSprite(grpMenuItems.members[0].x + grpMenuItems.members[0].width + 10, grpMenuItems.members[0].y + 10);
 		leftArrow.frames = ui_tex;
 		leftArrow.animation.addByPrefix('idle', "arrow left");
 		leftArrow.animation.addByPrefix('press', "arrow push left");
@@ -170,7 +170,7 @@ class StoryMenuState extends BaseMenuState<MenuItem>
 		add(txtWeekTitle);
 
 		super.create();
-		setObjectOrder(menuItems, 0);
+		setObjectOrder(grpMenuItems, 0);
 	}
 
 	override function closeSubState() {
@@ -186,7 +186,7 @@ class StoryMenuState extends BaseMenuState<MenuItem>
 			{
 				FlxG.sound.play(Paths.sound('confirmMenu'));
 
-				menuItems.members[curSelected].startFlashing();
+				grpMenuItems.members[curSelected].startFlashing();
 
 				for (char in grpWeekCharacters.members)
 				{
@@ -287,7 +287,7 @@ class StoryMenuState extends BaseMenuState<MenuItem>
 
 		grpLocks.forEach(function(lock:FlxSprite)
 		{
-			lock.y = menuItems.members[lock.ID].y;
+			lock.y = grpMenuItems.members[lock.ID].y;
 			lock.visible = (lock.y > FlxG.height / 2);
 		});
 	}
@@ -350,7 +350,7 @@ class StoryMenuState extends BaseMenuState<MenuItem>
 		var bullShit:Int = 0;
 
 		var unlocked:Bool = !weekIsLocked(leWeek.fileName);
-		for (item in menuItems.members)
+		for (item in grpMenuItems.members)
 		{
 			item.targetY = bullShit - curSelected;
 			if (item.targetY == Std.int(0) && unlocked)

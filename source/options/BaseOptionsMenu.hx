@@ -72,7 +72,7 @@ class BaseOptionsMenu extends BaseMenuSubstate<Alphabet>
 			/*optionText.forceX = 300;
 			optionText.yMult = 90;*/
 			optionText.targetY = i;
-			menuItems.add(optionText);
+			grpMenuItems.add(optionText);
 
 			if(optionsArray[i].type == 'bool') {
 				var checkbox:CheckboxThingie = new CheckboxThingie(optionText.x - 105, optionText.y, optionsArray[i].getValue() == true);
@@ -256,7 +256,7 @@ class BaseOptionsMenu extends BaseMenuSubstate<Alphabet>
 
 		var bullShit:Int = 0;
 
-		for (item in menuItems.members) {
+		for (item in grpMenuItems.members) {
 			item.targetY = bullShit - curSelected;
 			bullShit++;
 

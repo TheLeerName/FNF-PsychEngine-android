@@ -69,7 +69,7 @@ class OptionsState extends BaseMenuState<Alphabet>
 			var optionText:Alphabet = new Alphabet(0, 0, options[i], true);
 			optionText.screenCenter();
 			optionText.y += (100 * (i - (options.length / 2))) + 50;
-			menuItems.add(optionText);
+			grpMenuItems.add(optionText);
 		}
 
 		selectorLeft = new Alphabet(0, 0, '>', true);
@@ -113,7 +113,7 @@ class OptionsState extends BaseMenuState<Alphabet>
 
 		var bullShit:Int = 0;
 
-		for (item in menuItems.members) {
+		for (item in grpMenuItems.members) {
 			item.targetY = bullShit - curSelected;
 			bullShit++;
 

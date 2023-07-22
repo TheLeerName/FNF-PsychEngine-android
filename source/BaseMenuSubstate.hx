@@ -15,13 +15,13 @@ import input.AttachedHitbox;
  */
 class BaseMenuSubstate<T:FlxObject> extends MusicBeatSubstate {
 	/**
-	 * Current selected index on `menuItems`
+	 * Current selected index on `grpMenuItems`
 	 */
 	var curSelected(default, set):Int = 0;
 	/**
 	 * Group with items for menu
 	 */
-	var menuItems:FlxTypedGroup<T> = new FlxTypedGroup<T>();
+	var grpMenuItems:FlxTypedGroup<T> = new FlxTypedGroup<T>();
 	/**
 	 * For tapping on selected object by pointer. To enable/disable, change `acceptHitbox.visible`. Works only in mobile!
 	 */
@@ -87,7 +87,7 @@ class BaseMenuSubstate<T:FlxObject> extends MusicBeatSubstate {
 	 * Make sure you adding objects above `super.create();`
 	 */
 	override function create() {
-		insert(1, menuItems);
+		insert(1, grpMenuItems);
 
 		if (useAcceptHitbox) {
 			acceptHitbox.visible = controls.mobileInput;
@@ -145,13 +145,13 @@ class BaseMenuSubstate<T:FlxObject> extends MusicBeatSubstate {
 	}
 
 	function set_curSelected(v:Int):Int {
-		if (v >= menuItems.length) v = 0;
-		if (v < 0) v = menuItems.length - 1;
+		if (v >= grpMenuItems.length) v = 0;
+		if (v < 0) v = grpMenuItems.length - 1;
 
 		var change:Int = v - curSelected;
 		curSelected = v;
 		changeSelection(change);
-		if (menuItems.length > 0) acceptHitbox.sprTracker = menuItems.members[v];
+		if (grpMenuItems.length > 0) acceptHitbox.sprTracker = grpMenuItems.members[v];
 		return curSelected = v;
 	}
 }

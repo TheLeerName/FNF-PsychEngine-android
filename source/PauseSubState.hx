@@ -13,8 +13,8 @@ import flixel.addons.transition.FlxTransitionableState;
 
 class PauseSubState extends BaseMenuSubstate<Alphabet>
 {
-	var options:Array<String> = [];
-	var optionsOG:Array<String> = ['Resume', 'Restart Song', 'Change Difficulty', 'Exit to menu'];
+	var menuItems:Array<String> = [];
+	var menuItemsOG:Array<String> = ['Resume', 'Restart Song', 'Change Difficulty', 'Exit to menu'];
 	var difficultyChoices = [];
 
 	var pauseMusic:FlxSound;
@@ -29,23 +29,23 @@ class PauseSubState extends BaseMenuSubstate<Alphabet>
 	public function new(?x:Float, ?y:Float) {
 		super();
 
-		if(CoolUtil.difficulties.length < 2) optionsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
+		if(CoolUtil.difficulties.length < 2) menuItemsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
 
 		if(PlayState.chartingMode)
 		{
-			optionsOG.insert(2, 'Leave Charting Mode');
+			menuItemsOG.insert(2, 'Leave Charting Mode');
 			
 			var num:Int = 0;
 			if(!PlayState.instance.startingSong)
 			{
 				num = 1;
-				optionsOG.insert(3, 'Skip Time');
+				menuItemsOG.insert(3, 'Skip Time');
 			}
-			optionsOG.insert(3 + num, 'End Song');
-			optionsOG.insert(4 + num, 'Toggle Practice Mode');
-			optionsOG.insert(5 + num, 'Toggle Botplay');
+			menuItemsOG.insert(3 + num, 'End Song');
+			menuItemsOG.insert(4 + num, 'Toggle Practice Mode');
+			menuItemsOG.insert(5 + num, 'Toggle Botplay');
 		}
-		options = optionsOG;
+		menuItems = menuItemsOG;
 
 		for (i in 0...CoolUtil.difficulties.length) {
 			var diff:String = '' + CoolUtil.difficulties[i];
@@ -128,9 +128,9 @@ class PauseSubState extends BaseMenuSubstate<Alphabet>
 	override function accept() {
 		if (cantUnpause <= 0 || !ClientPrefs.controllerMode)
 		{
-			if (options == difficultyChoices)
+			if (menuItems == difficultyChoices)
 			{
-				if(options.length - 1 != curSelected && difficultyChoices.contains(options[curSelected])) {
+				if(menuItems.length - 1 != curSelected && difficultyChoices.contains(menuItems[curSelected])) {
 					var name:String = PlayState.SONG.song;
 					var poop = Highscore.formatSong(name, curSelected);
 					PlayState.SONG = Song.loadFromJson(poop, name);
@@ -142,16 +142,16 @@ class PauseSubState extends BaseMenuSubstate<Alphabet>
 					return;
 				}
 
-				options = optionsOG;
+				menuItems = menuItemsOG;
 				regenMenu();
 			}
 
-			switch (options[curSelected])
+			switch (menuItems[curSelected])
 			{
 				case "Resume":
 					close();
 				case 'Change Difficulty':
-					options = difficultyChoices;
+					menuItems = difficultyChoices;
 					deleteSkipTimeText();
 					regenMenu();
 				case 'Toggle Practice Mode':
@@ -217,7 +217,7 @@ class PauseSubState extends BaseMenuSubstate<Alphabet>
 
 		var accepted = controls.ACCEPT;
 
-		var daSelected:String = options[curSelected];
+		var daSelected:String = menuItems[curSelected];
 		switch (daSelected)
 		{
 			case 'Skip Time':
@@ -291,7 +291,7 @@ class PauseSubState extends BaseMenuSubstate<Alphabet>
 
 		var bullShit:Int = 0;
 
-		for (item in menuItems.members)
+		for (item in grpMenuItems.members)
 		{
 			item.targetY = bullShit - curSelected;
 			bullShit++;
@@ -314,20 +314,20 @@ class PauseSubState extends BaseMenuSubstate<Alphabet>
 	}
 
 	function regenMenu():Void {
-		for (i in 0...menuItems.members.length) {
-			var obj = menuItems.members[0];
+		for (i in 0...grpMenuItems.members.length) {
+			var obj = grpMenuItems.members[0];
 			obj.kill();
-			menuItems.remove(obj, true);
+			grpMenuItems.remove(obj, true);
 			obj.destroy();
 		}
 
-		for (i in 0...options.length) {
-			var item = new Alphabet(90, 320, options[i], true);
+		for (i in 0...menuItems.length) {
+			var item = new Alphabet(90, 320, menuItems[i], true);
 			item.isMenuItem = true;
 			item.targetY = i;
-			menuItems.add(item);
+			grpMenuItems.add(item);
 
-			if(options[i] == 'Skip Time')
+			if(menuItems[i] == 'Skip Time')
 			{
 				skipTimeText = new FlxText(0, 0, 0, '', 64);
 				skipTimeText.setFormat(Paths.font("vcr.ttf"), 64, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
