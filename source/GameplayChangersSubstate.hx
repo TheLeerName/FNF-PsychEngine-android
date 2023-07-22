@@ -302,8 +302,8 @@ class GameplayChangersSubstate extends BaseMenuSubstate<Alphabet>
 		holdTime = 0;
 	}
 	
-	override function changeSelection(change:Int)
-	{
+	override function changeSelection(change:Int) {
+		if (change != 0) FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 		var bullShit:Int = 0;
 
 		for (item in menuItems.members) {
@@ -322,7 +322,6 @@ class GameplayChangersSubstate extends BaseMenuSubstate<Alphabet>
 			}
 		}
 		curOption = optionsArray[curSelected]; //shorter lol
-		FlxG.sound.play(Paths.sound('scrollMenu'));
 	}
 
 	function reloadCheckboxes() {
