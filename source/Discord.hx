@@ -9,6 +9,7 @@ import llua.Lua;
 import llua.State;
 #end
 
+typedef DiscordClient = Discord;
 class Discord
 {
 	public static var isInitialized:Bool = false;
