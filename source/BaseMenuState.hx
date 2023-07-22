@@ -27,6 +27,10 @@ class BaseMenuState<T:FlxObject> extends MusicBeatState {
 	 */
 	var acceptHitbox:AttachedHitbox = new AttachedHitbox('accept');
 	/**
+	 * Whether `acceptHitbox` need to be used (for example if menu not uses `controls.ACCEPT` you need set it to `false`)
+	 */
+	var useAcceptHitbox:Bool = true;
+	/**
 	 * Set this to `false` if you want disable changing selection, `back` and `accept` calling
 	 */
 	var allowControls:Bool = true;
@@ -85,8 +89,10 @@ class BaseMenuState<T:FlxObject> extends MusicBeatState {
 	override function create() {
 		insert(1, menuItems);
 
-		acceptHitbox.visible = controls.mobileInput;
-		add(acceptHitbox);
+		if (useAcceptHitbox) {
+			acceptHitbox.visible = controls.mobileInput;
+			add(acceptHitbox);
+		}
 
 		super.create();
 
