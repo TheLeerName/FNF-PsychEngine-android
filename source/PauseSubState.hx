@@ -123,6 +123,7 @@ class PauseSubState extends BaseMenuSubstate<Alphabet>
 
 		regenMenu();
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+		acceptHitbox.cameras = cameras;
 	}
 
 	override function accept() {
